@@ -1,0 +1,27 @@
+export const LABOR_RATE = 45; // $/hr
+export const MACHINE_RATE = 18; // $/hr (Form 4L ballpark; adjust as needed)
+export const OVERHEAD_PCT = 0.12;
+export const MARGIN_PCT = 0.25;
+
+// mm-based assumptions
+export const PRINT_SPEED_MM_PER_HR = 25; // simplistic z-speed estimate for MVP
+export const DEFAULT_LAYER_HEIGHT_MM = 0.1; // not directly used, but future-ready
+
+export const MATERIALS = [
+  { id: 'rigid10k', name: 'Rigid 10K', cost_per_cc: 0.22, handling_factor: 1.05 },
+  { id: 'tough1500', name: 'Tough 1500', cost_per_cc: 0.18, handling_factor: 1.00 },
+  { id: 'high_temp', name: 'High Temp', cost_per_cc: 0.30, handling_factor: 1.15 },
+  { id: 'esd', name: 'ESD Resin', cost_per_cc: 0.35, handling_factor: 1.25 },
+];
+
+export const FINISH_LEVELS = [
+  { id: 'basic', name: 'Basic (support removal)', finishing_coef_hr_per_cm2: 0.003 },
+  { id: 'cosmetic', name: 'Cosmetic (sanded)', finishing_coef_hr_per_cm2: 0.008 },
+  { id: 'paint_ready', name: 'Paint-ready', finishing_coef_hr_per_cm2: 0.015 },
+];
+
+export const LEAD_TIMES = [
+  { id: 'standard', name: 'Standard (3 days)', days: 3, price_multiplier: 1.0 },
+  { id: 'rush', name: 'Rush (2 days)', days: 2, price_multiplier: 1.25 },
+  { id: 'expedite', name: 'Expedite (1 day)', days: 1, price_multiplier: 1.6 },
+];
