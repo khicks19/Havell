@@ -80,7 +80,7 @@ export default function QuoteWidget() {
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
       <div className="rounded-2xl border border-gray-800 bg-gray-900/50 p-6">
         <div className="text-sm text-gray-300">1) Upload CAD (.stl)</div>
-        <input type="file" accept=".stl" className="mt-2 block w-full text-sm text-gray-200 file:mr-4 file:rounded-md file:border-0 file:bg-sky-600 file:px-3 file:py-2 file:text-white hover:file:bg-sky-500" onChange={(e)=>{ setFile(e.target.files?.[0]||null); setStats(null); setQuote(null); setError(null)}}/>
+        <input type="file" accept=".stl" className="mt-2 block w-full text-sm text-gray-200 file:mr-4 file:rounded-md file:border-0 file:bg-[color:var(--brand-red,#E3362C)] file:px-3 file:py-2 file:text-white hover:file:opacity-90" onChange={(e)=>{ setFile(e.target.files?.[0]||null); setStats(null); setQuote(null); setError(null)}}/>
 
         <div className="mt-3 flex items-center gap-4 text-sm">
           <label className="flex items-center gap-2"><input type="radio" name="units" value="mm" checked={units==='mm'} onChange={()=>setUnits('mm')} /><span>mm</span></label>
@@ -99,7 +99,7 @@ export default function QuoteWidget() {
           <Number label="Quantity" value={qty} onChange={setQty} min={1} />
         </div>
 
-        <button onClick={handleQuote} disabled={!stats||loading} className="mt-4 w-full rounded-xl bg-sky-500 px-4 py-2 text-sm font-medium text-gray-950 hover:bg-sky-400 disabled:opacity-50">{loading?'Quoting…':'Get Price'}</button>
+        <button onClick={handleQuote} disabled={!stats||loading} className="mt-4 w-full rounded-xl bg-[color:var(--brand-red,#E3362C)] px-4 py-2 text-sm font-medium text-gray-950 hover:opacity-90 disabled:opacity-50">{loading?'Quoting…':'Get Price'}</button>
 
         {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
       </div>
@@ -144,7 +144,7 @@ export default function QuoteWidget() {
             </div>
             <div className="mt-4 text-xs text-gray-400">Lead time: {leadObj.days} day(s). Prices include lead-time multiplier.</div>
             <div className="mt-4 flex flex-col gap-2">
-              <button className="rounded-xl bg-emerald-500 px-4 py-2 font-medium text-gray-950 hover:bg-emerald-400 disabled:opacity-50">Checkout (mock)</button>
+              <button className="rounded-xl bg-emerald-500 px-4 py-2 font-medium text-gray-950 hover:opacity-90 disabled:opacity-50">Checkout (mock)</button>
               <button className="rounded-xl border border-white/10 px-4 py-2 font-medium hover:bg-white/10">Save RFQ (email)</button>
             </div>
           </div>
@@ -156,12 +156,6 @@ export default function QuoteWidget() {
   )
 }
 
-function Metric({ label, value }) {
-  return (<div><div className="text-gray-400">{label}</div><div className="mt-1 rounded-md bg-white/5 px-3 py-2">{value}</div></div>)
-}
-function Select({ label, value, onChange, options }) {
-  return (<label className="block text-sm"><div className="text-gray-300">{label}</div><select className="mt-1 w-full rounded-xl border border-gray-700 bg-gray-800 px-3 py-2" value={value} onChange={(e)=>onChange(e.target.value)}>{options.map(o=><option key={o.id} value={o.id}>{o.name}</option>)}</select></label>)
-}
-function Number({ label, value, onChange, min=1 }) {
-  return (<label className="block text-sm"><div className="text-gray-300">{label}</div><input type="number" min={min} className="mt-1 w-full rounded-xl border border-gray-700 bg-gray-800 px-3 py-2" value={value} onChange={(e)=>onChange(e.target.value)} /></label>)
-}
+function Metric({ label, value }){ return (<div><div className="text-gray-400">{label}</div><div className="mt-1 rounded-md bg-white/5 px-3 py-2">{value}</div></div>) }
+function Select({ label, value, onChange, options }){ return (<label className="block text-sm"><div className="text-gray-300">{label}</div><select className="mt-1 w-full rounded-xl border border-gray-700 bg-gray-800 px-3 py-2" value={value} onChange={(e)=>onChange(e.target.value)}>{options.map(o=> <option key={o.id} value={o.id}>{o.name}</option>)}</select></label>) }
+function Number({ label, value, onChange, min=1 }){ return (<label className="block text-sm"><div className="text-gray-300">{label}</div><input type="number" min={min} className="mt-1 w-full rounded-xl border border-gray-700 bg-gray-800 px-3 py-2" value={value} onChange={(e)=>onChange(e.target.value)} /></label>) }

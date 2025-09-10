@@ -1,7 +1,12 @@
-# Havell — Instant Quote MVP v2
+# Havell Website v2
+- Landing quote on Home
+- Animated hover logo (red orbit draws around HL)
+- Expanded Materials page with categories & use-cases
+- Serverless APIs: /api/quote, /api/contact, /api/rfq
 
-Safer error handling and JSON headers included.
+## Dev
+npm install
+npm run dev
 
-- dev: `npm run dev`
-- local serverless: `vercel dev`
-- deploy: import to Vercel; `/api` becomes serverless functions.
+## Deploy
+Import repo to Vercel (build: `vite build`, output: `dist`).
