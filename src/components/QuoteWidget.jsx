@@ -80,31 +80,14 @@ export default function QuoteWidget() {
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
       <div className="rounded-2xl border border-gray-800 bg-gray-900/50 p-6">
         <div className="text-sm text-gray-300">1) Upload CAD (.stl)</div>
-        <input
-          type="file"
-          accept=".stl"
-          className="mt-2 block w-full text-sm text-gray-200 file:mr-4 file:rounded-md file:border-0 file:bg-sky-600 file:px-3 file:py-2 file:text-white hover:file:bg-sky-500"
-          onChange={(e) => { setFile(e.target.files?.[0] || null); setStats(null); setQuote(null); setError(null); }}
-        />
+        <input type="file" accept=".stl" className="mt-2 block w-full text-sm text-gray-200 file:mr-4 file:rounded-md file:border-0 file:bg-sky-600 file:px-3 file:py-2 file:text-white hover:file:bg-sky-500" onChange={(e)=>{ setFile(e.target.files?.[0]||null); setStats(null); setQuote(null); setError(null)}}/>
 
         <div className="mt-3 flex items-center gap-4 text-sm">
-          <label className="flex items-center gap-2">
-            <input type="radio" name="units" value="mm" checked={units === 'mm'} onChange={() => setUnits('mm')} />
-            <span>mm</span>
-          </label>
-          <label className="flex items-center gap-2">
-            <input type="radio" name="units" value="in" checked={units === 'in'} onChange={() => setUnits('in')} />
-            <span>inches</span>
-          </label>
+          <label className="flex items-center gap-2"><input type="radio" name="units" value="mm" checked={units==='mm'} onChange={()=>setUnits('mm')} /><span>mm</span></label>
+          <label className="flex items-center gap-2"><input type="radio" name="units" value="in" checked={units==='in'} onChange={()=>setUnits('in')} /><span>inches</span></label>
         </div>
 
-        <button
-          onClick={handleParse}
-          disabled={!file || loading}
-          className="mt-4 w-full rounded-xl bg-white/10 px-4 py-2 text-sm font-medium hover:bg-white/15 disabled:opacity-50"
-        >
-          {loading ? 'Parsing…' : 'Analyze Model'}
-        </button>
+        <button onClick={handleParse} disabled={!file||loading} className="mt-4 w-full rounded-xl bg-white/10 px-4 py-2 text-sm font-medium hover:bg-white/15 disabled:opacity-50">{loading?'Parsing…':'Analyze Model'}</button>
 
         <hr className="my-6 border-white/10" />
 
@@ -116,13 +99,7 @@ export default function QuoteWidget() {
           <Number label="Quantity" value={qty} onChange={setQty} min={1} />
         </div>
 
-        <button
-          onClick={handleQuote}
-          disabled={!stats || loading}
-          className="mt-4 w-full rounded-xl bg-sky-500 px-4 py-2 text-sm font-medium text-gray-950 hover:bg-sky-400 disabled:opacity-50"
-        >
-          {loading ? 'Quoting…' : 'Get Price'}
-        </button>
+        <button onClick={handleQuote} disabled={!stats||loading} className="mt-4 w-full rounded-xl bg-sky-500 px-4 py-2 text-sm font-medium text-gray-950 hover:bg-sky-400 disabled:opacity-50">{loading?'Quoting…':'Get Price'}</button>
 
         {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
       </div>
@@ -137,13 +114,9 @@ export default function QuoteWidget() {
             <Metric label="Z Height" value={`${stats.z_mm.toFixed(1)} mm`} />
             <div className="col-span-2">
               <div className="text-gray-400">Bounding Box (mm)</div>
-              <div className="mt-1 rounded-md bg-white/5 px-3 py-2">
-                {stats.bbox.size_mm.map(n => n.toFixed(1)).join(' × ')}
-              </div>
+              <div className="mt-1 rounded-md bg-white/5 px-3 py-2">{stats.bbox.size_mm.map(n=>n.toFixed(1)).join(' × ')}</div>
             </div>
-            <div className="col-span-2 text-xs text-gray-400 mt-2">
-              Units assumed: <b>{units}</b>. If your STL was exported in inches, toggle accordingly.
-            </div>
+            <div className="col-span-2 text-xs text-gray-400 mt-2">Units assumed: <b>{units}</b>. If your STL was exported in inches, toggle accordingly.</div>
           </div>
         ) : (
           <p className="mt-3 text-sm text-gray-400">Upload and analyze a model to see metrics.</p>
@@ -184,40 +157,11 @@ export default function QuoteWidget() {
 }
 
 function Metric({ label, value }) {
-  return (
-    <div>
-      <div className="text-gray-400">{label}</div>
-      <div className="mt-1 rounded-md bg-white/5 px-3 py-2">{value}</div>
-    </div>
-  )
+  return (<div><div className="text-gray-400">{label}</div><div className="mt-1 rounded-md bg-white/5 px-3 py-2">{value}</div></div>)
 }
-
 function Select({ label, value, onChange, options }) {
-  return (
-    <label className="block text-sm">
-      <div className="text-gray-300">{label}</div>
-      <select
-        className="mt-1 w-full rounded-xl border border-gray-700 bg-gray-800 px-3 py-2"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      >
-        {options.map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
-      </select>
-    </label>
-  )
+  return (<label className="block text-sm"><div className="text-gray-300">{label}</div><select className="mt-1 w-full rounded-xl border border-gray-700 bg-gray-800 px-3 py-2" value={value} onChange={(e)=>onChange(e.target.value)}>{options.map(o=><option key={o.id} value={o.id}>{o.name}</option>)}</select></label>)
 }
-
 function Number({ label, value, onChange, min=1 }) {
-  return (
-    <label className="block text-sm">
-      <div className="text-gray-300">{label}</div>
-      <input
-        type="number"
-        min={min}
-        className="mt-1 w-full rounded-xl border border-gray-700 bg-gray-800 px-3 py-2"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      />
-    </label>
-  )
+  return (<label className="block text-sm"><div className="text-gray-300">{label}</div><input type="number" min={min} className="mt-1 w-full rounded-xl border border-gray-700 bg-gray-800 px-3 py-2" value={value} onChange={(e)=>onChange(e.target.value)} /></label>)
 }

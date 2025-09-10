@@ -1,13 +1,7 @@
-# Havell — Instant Quote MVP (Vercel + Vite + React) — v2
+# Havell — Instant Quote MVP v2
 
-This v2 includes safer error handling to avoid blank screens when the API is unreachable, and it forces JSON headers on the API responses.
+Safer error handling and JSON headers included.
 
-## Quick start
-```bash
-npm install
-npm run dev
-# OR run with serverless locally:
-# vercel login
-# vercel dev
-```
-Deploy to Vercel by importing this repo. The `/api` folder becomes Serverless Functions.
+- dev: `npm run dev`
+- local serverless: `vercel dev`
+- deploy: import to Vercel; `/api` becomes serverless functions.
