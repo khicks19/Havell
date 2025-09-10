@@ -1,6 +1,6 @@
 {
-  "name": "havell-website-v2",
-  "version": "0.2.0",
+  "name": "havell-website-v3",
+  "version": "0.3.3",
   "private": true,
   "type": "module",
   "scripts": {

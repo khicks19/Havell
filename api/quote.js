@@ -51,8 +51,6 @@ export default async function handler(req, res) {
       },
       totals:{ unit_price: round(unit_price), batch_total: round(batch_total) }
     })
-  } catch (e) {
-    console.error(e); try{ res.status(500).json({ error:'Quote error' }) }catch(_){}
-  }
+  } catch (e) { console.error(e); try{ res.status(500).json({ error:'Quote error' }) }catch(_){ } }
 }
 function round(n){ return Math.round(n*100)/100 }

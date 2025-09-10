@@ -1,1 +1,12 @@
-@tailwind base;@tailwind components;@tailwind utilities;:root{color-scheme:dark;}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Buttons */
+.btn { @apply inline-flex items-center justify-center rounded-full border px-5 py-3 text-sm font-medium transition; }
+.btn-primary { @apply border-black bg-black text-white; }
+.btn-primary:hover { @apply border-[color:var(--brand-red,#E3362C)] bg-white text-[color:var(--brand-red,#E3362C)]; }
+.btn-outline { @apply border-black text-black bg-white; }
+.btn-outline:hover { @apply border-[color:var(--brand-red,#E3362C)] text-[color:var(--brand-red,#E3362C)] bg-white; }
+
+:root{ color-scheme: light; }
