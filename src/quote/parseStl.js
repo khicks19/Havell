@@ -1,78 +1,88 @@
-export async function parseSTL(file, units='mm') {
-  const arrayBuffer = await file.arrayBuffer();
-  const dataView = new DataView(arrayBuffer);
-  const isAscii = checkAscii(arrayBuffer);
+// src/quote/parseStl.js
+// Minimal, Vite-friendly STL parser (ASCII or binary). Units: mm or inches.
+export async function parseSTL(file, units = 'mm') {
+  const buf = await file.arrayBuffer();
+  const dv = new DataView(buf);
+
+  // Heuristic: ASCII if header starts with "solid"
+  const isAscii = (() => {
+    const head = new Uint8Array(buf.slice(0, 80));
+    let txt = '';
+    for (let i = 0; i < head.length; i++) txt += String.fromCharCode(head[i]);
+    return txt.trim().toLowerCase().startsWith('solid');
+  })();
 
   let vertices = [];
   let triangles = 0;
 
   if (!isAscii) {
-    if (dataView.byteLength < 84) throw new Error('Invalid STL: too small');
-    const triCount = dataView.getUint32(80, true);
+    // Binary STL
+    if (dv.byteLength < 84) throw new Error('Invalid STL: too small');
+    const triCount = dv.getUint32(80, true);
     let offset = 84;
     triangles = triCount;
     for (let i = 0; i < triCount; i++) {
-      offset += 12;
+      offset += 12; // skip normal
       for (let v = 0; v < 9; v++) {
-        vertices.push(dataView.getFloat32(offset, true));
+        vertices.push(dv.getFloat32(offset, true));
         offset += 4;
       }
-      offset += 2;
+      offset += 2; // skip attribute
     }
   } else {
-    const text = new TextDecoder().decode(arrayBuffer);
-    const lines = text.split(/[
-]+/);
-    let current = [];
-    for (const line of lines) {
-      const m = line.trim().match(/^vertex\s+([\-0-9.eE]+)\s+([\-0-9.eE]+)\s+([\-0-9.eE]+)/);
+    // ASCII STL
+    const text = new TextDecoder().decode(buf);
+    const lines = text.split(/\r?\n/);
+    const vertexRE = /^vertex\s+([-\d.eE]+)\s+([-\d.eE]+)\s+([-\d.eE]+)/;
+    let tmp = [];
+    for (let i = 0; i < lines.length; i++) {
+      const m = vertexRE.exec(lines[i].trim());
       if (m) {
-        current.push(parseFloat(m[1]), parseFloat(m[2]), parseFloat(m[3]));
-        if (current.length === 9) { vertices.push(...current); current = []; triangles++; }
+        tmp.push(parseFloat(m[1]), parseFloat(m[2]), parseFloat(m[3]));
+        if (tmp.length === 9) { vertices.push(...tmp); tmp = []; triangles++; }
       }
     }
-    if (triangles === 0) throw new Error('Could not parse ASCII STL vertices');
+    if (triangles === 0) throw new Error('ASCII STL parse failed');
   }
 
-  let scale = 1.0; if (units === 'in') scale = 25.4;
+  // Unit scale
+  const scale = units === 'in' ? 25.4 : 1;
   for (let i = 0; i < vertices.length; i++) vertices[i] *= scale;
 
-  let min = [Infinity, Infinity, Infinity], max = [-Infinity, -Infinity, -Infinity];
-  let area = 0.0, volume6 = 0.0;
+  // Metrics
+  let minx=Infinity, miny=Infinity, minz=Infinity, maxx=-Infinity, maxy=-Infinity, maxz=-Infinity;
+  let area = 0, volume6 = 0;
+
+  function cross(ax, ay, az, bx, by, bz) { return [ay*bz - az*by, az*bx - ax*bz, ax*by - ay*bx]; }
+  function dot(ax, ay, az, bx, by, bz) { return ax*bx + ay*by + az*bz; }
 
   for (let i = 0; i < vertices.length; i += 9) {
-    const v1 = [vertices[i], vertices[i+1], vertices[i+2]];
-    const v2 = [vertices[i+3], vertices[i+4], vertices[i+5]];
-    const v3 = [vertices[i+6], vertices[i+7], vertices[i+8]];
-    for (const v of [v1, v2, v3]) {
-      min[0] = Math.min(min[0], v[0]); min[1] = Math.min(min[1], v[1]); min[2] = Math.min(min[2], v[2]);
-      max[0] = Math.max(max[0], v[0]); max[1] = Math.max(max[1], v[1]); max[2] = Math.max(max[2], v[2]);
-    }
-    const a = sub(v2, v1), b = sub(v3, v1);
-    const triArea = 0.5 * length(cross(a, b)); area += triArea;
-    volume6 += dot(v1, cross(v2, v3));
+    const x1=vertices[i],   y1=vertices[i+1], z1=vertices[i+2];
+    const x2=vertices[i+3], y2=vertices[i+4], z2=vertices[i+5];
+    const x3=vertices[i+6], y3=vertices[i+7], z3=vertices[i+8];
+
+    minx = Math.min(minx, x1, x2, x3);
+    miny = Math.min(miny, y1, y2, y3);
+    minz = Math.min(minz, z1, z2, z3);
+    maxx = Math.max(maxx, x1, x2, x3);
+    maxy = Math.max(maxy, y1, y2, y3);
+    maxz = Math.max(maxz, z1, z2, z3);
+
+    const ax = x2 - x1, ay = y2 - y1, az = z2 - z1;
+    const bx = x3 - x1, by = y3 - y1, bz = z3 - z1;
+    const c = cross(ax, ay, az, bx, by, bz);
+    const triArea = 0.5 * Math.sqrt(c[0]*c[0] + c[1]*c[1] + c[2]*c[2]);
+    area += triArea;
+    volume6 += dot(x1, y1, z1, c[0], c[1], c[2]);
   }
 
-  const volume = Math.abs(volume6) / 6.0;
-  const area_cm2 = area / 100.0;
-  const z_mm = max[2] - min[2];
+  const volume = Math.abs(volume6) / 6;
 
   return {
-    vertices: new Float32Array(vertices),
     triangles,
-    bbox: { min, max, size_mm: [max[0]-min[0], max[1]-min[1], z_mm] },
-    area_cm2,
-    volume_cc: volume / 1000.0,
-    z_mm,
+    bbox: { min: [minx, miny, minz], max: [maxx, maxy, maxz], size_mm: [maxx-minx, maxy-miny, maxz-minz] },
+    area_cm2: area / 100,
+    volume_cc: volume / 1000,
+    z_mm: maxz - minz
   };
 }
-
-function checkAscii(buffer) {
-  const txt = new TextDecoder().decode(buffer.slice(0, 512)).toLowerCase();
-  if (txt.startsWith('solid')) return txt.includes('facet');
-  return false;
-}
-function sub(a, b){ return [a[0]-b[0], a[1]-b[1], a[2]-b[2]]; }
-function cross(a, b){ return [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]]; }
-function dot(a, b){ return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]; }
-function length(a){ return Math.sqrt(a[0]*a[0]+a[1]*a[1]+a[2]*a[2]); }
