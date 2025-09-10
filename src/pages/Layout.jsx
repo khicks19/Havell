@@ -13,12 +13,18 @@ export default function Layout(){
             <LogoImg className="h-20 w-auto sm:h-24" />
           </Link>
 
-          {/* hamburger shown on all sizes */}
-          <button onClick={()=>setOpen(true)} className="rounded-full border border-black p-2" aria-label="Open menu">
-            <div className="h-0.5 w-6 bg-black mb-1"></div>
-            <div className="h-0.5 w-6 bg-black mb-1"></div>
-            <div className="h-0.5 w-6 bg-black"></div>
+         {/* hamburger shown on all sizes */}
+          <button
+            onClick={() => setOpen(true)}
+            aria-label="Open menu"
+            className="group rounded-full border border-black bg-black p-2 transition
+                       hover:bg-white hover:border-[color:var(--brand-red,#E3362C)] focus:outline-none"
+>
+            <div className="h-0.5 w-6 bg-white mb-1 transition group-hover:bg-[color:var(--brand-red,#E3362C)]"></div>
+            <div className="h-0.5 w-6 bg-white mb-1 transition group-hover:bg-[color:var(--brand-red,#E3362C)]"></div>
+            <div className="h-0.5 w-6 bg-white transition group-hover:bg-[color:var(--brand-red,#E3362C)]"></div>
           </button>
+
         </div>
       </header>
 
