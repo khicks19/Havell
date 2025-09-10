@@ -1,11 +1,9 @@
-export const LABOR_RATE = 45; // $/hr
-export const MACHINE_RATE = 18; // $/hr (Form 4L ballpark; adjust as needed)
+export const LABOR_RATE = 45;
+export const MACHINE_RATE = 18;
 export const OVERHEAD_PCT = 0.12;
 export const MARGIN_PCT = 0.25;
-
-// mm-based assumptions
-export const PRINT_SPEED_MM_PER_HR = 25; // simplistic z-speed estimate for MVP
-export const DEFAULT_LAYER_HEIGHT_MM = 0.1; // not directly used, but future-ready
+export const PRINT_SPEED_MM_PER_HR = 25;
+export const DEFAULT_LAYER_HEIGHT_MM = 0.1;
 
 export const MATERIALS = [
   { id: 'rigid10k', name: 'Rigid 10K', cost_per_cc: 0.22, handling_factor: 1.05 },

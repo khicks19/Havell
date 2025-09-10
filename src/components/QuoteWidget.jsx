@@ -4,7 +4,7 @@ import { MATERIALS, FINISH_LEVELS, LEAD_TIMES } from '../quote/PricingConfig'
 
 export default function QuoteWidget() {
   const [file, setFile] = useState(null)
-  const [units, setUnits] = useState('mm') // 'mm' or 'in'
+  const [units, setUnits] = useState('mm')
   const [stats, setStats] = useState(null)
   const [material, setMaterial] = useState(MATERIALS[0].id)
   const [finish, setFinish] = useState(FINISH_LEVELS[0].id)
@@ -34,9 +34,10 @@ export default function QuoteWidget() {
   }
 
   async function handleQuote() {
-    if (!stats) return
-    setLoading(true)
-    setError(null)
+    if (!stats) return;
+    setLoading(true);
+    setError(null);
+    setQuote(null);
     try {
       const res = await fetch('/api/quote', {
         method: 'POST',
@@ -53,20 +54,30 @@ export default function QuoteWidget() {
             bbox: stats.bbox
           }
         })
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data?.error || 'Quote failed')
-      setQuote(data)
+      });
+
+      const contentType = res.headers.get('content-type') || '';
+      let data;
+      if (contentType.includes('application/json')) {
+        data = await res.json();
+      } else {
+        const text = await res.text();
+        throw new Error('API endpoint not running yet (deploy to Vercel or use `vercel dev`).');
+      }
+
+      if (!res.ok) throw new Error(data?.error || 'Quote failed');
+      if (!data?.totals) throw new Error('Malformed response from API');
+      setQuote(data);
     } catch (e) {
-      setError(e.message || 'Failed to get quote')
+      console.error(e);
+      setError(e.message || 'Failed to get quote');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
   return (
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-      {/* LEFT: upload + options */}
       <div className="rounded-2xl border border-gray-800 bg-gray-900/50 p-6">
         <div className="text-sm text-gray-300">1) Upload CAD (.stl)</div>
         <input
@@ -116,7 +127,6 @@ export default function QuoteWidget() {
         {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
       </div>
 
-      {/* MIDDLE: metrics */}
       <div className="rounded-2xl border border-gray-800 bg-gray-900/50 p-6">
         <div className="text-sm text-gray-300">Model metrics</div>
         {stats ? (
@@ -140,27 +150,26 @@ export default function QuoteWidget() {
         )}
       </div>
 
-      {/* RIGHT: quote */}
       <div className="rounded-2xl border border-gray-800 bg-gray-900/50 p-6">
         <div className="text-sm text-gray-300">Quote</div>
         {quote ? (
           <div className="mt-3 text-sm">
-            <div className="text-xl font-semibold">${quote.totals.unit_price.toFixed(2)} <span className="text-sm text-gray-400">/ unit</span></div>
-            <div className="mt-1 text-gray-300">Qty {quote.input.qty} → <b>${quote.totals.batch_total.toFixed(2)}</b></div>
+            <div className="text-xl font-semibold">${Number(quote?.totals?.unit_price ?? 0).toFixed(2)} <span className="text-sm text-gray-400">/ unit</span></div>
+            <div className="mt-1 text-gray-300">Qty {quote?.input?.qty} → <b>${Number(quote?.totals?.batch_total ?? 0).toFixed(2)}</b></div>
             <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-3">
               <div className="font-medium">Breakdown</div>
               <ul className="mt-2 space-y-1 text-gray-300">
-                <li>Material: ${quote.breakdown.material.toFixed(2)}</li>
-                <li>Print time: ${quote.breakdown.print.toFixed(2)} ({quote.derived.print_time_hr.toFixed(2)} hr)</li>
-                <li>Support removal: ${quote.breakdown.support.toFixed(2)}</li>
-                <li>Wash & Cure: ${quote.breakdown.wash_cure.toFixed(2)}</li>
-                <li>Finishing: ${quote.breakdown.finishing.toFixed(2)}</li>
-                <li>Inspection: ${quote.breakdown.inspection.toFixed(2)}</li>
-                <li>Overhead: ${quote.breakdown.overhead.toFixed(2)}</li>
-                <li>Margin: ${quote.breakdown.margin.toFixed(2)}</li>
+                <li>Material: ${Number(quote?.breakdown?.material ?? 0).toFixed(2)}</li>
+                <li>Print time: ${Number(quote?.breakdown?.print ?? 0).toFixed(2)} ({Number(quote?.derived?.print_time_hr ?? 0).toFixed(2)} hr)</li>
+                <li>Support removal: ${Number(quote?.breakdown?.support ?? 0).toFixed(2)}</li>
+                <li>Wash & Cure: ${Number(quote?.breakdown?.wash_cure ?? 0).toFixed(2)}</li>
+                <li>Finishing: ${Number(quote?.breakdown?.finishing ?? 0).toFixed(2)}</li>
+                <li>Inspection: ${Number(quote?.breakdown?.inspection ?? 0).toFixed(2)}</li>
+                <li>Overhead: ${Number(quote?.breakdown?.overhead ?? 0).toFixed(2)}</li>
+                <li>Margin: ${Number(quote?.breakdown?.margin ?? 0).toFixed(2)}</li>
               </ul>
             </div>
-            <div className="mt-4 text-xs text-gray-400">Lead time: {quote.derived.lead_days} day(s). Prices include lead-time multiplier.</div>
+            <div className="mt-4 text-xs text-gray-400">Lead time: {leadObj.days} day(s). Prices include lead-time multiplier.</div>
             <div className="mt-4 flex flex-col gap-2">
               <button className="rounded-xl bg-emerald-500 px-4 py-2 font-medium text-gray-950 hover:bg-emerald-400 disabled:opacity-50">Checkout (mock)</button>
               <button className="rounded-xl border border-white/10 px-4 py-2 font-medium hover:bg-white/10">Save RFQ (email)</button>

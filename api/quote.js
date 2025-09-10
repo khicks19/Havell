@@ -1,4 +1,5 @@
 export default async function handler(req, res) {
+  res.setHeader('content-type', 'application/json');
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' }); return;
   }
@@ -9,7 +10,6 @@ export default async function handler(req, res) {
       res.status(400).json({ error: 'Missing fields' }); return;
     }
 
-    // Config (sync with front-end config but keep server as source of truth in production)
     const LABOR_RATE = 45;
     const MACHINE_RATE = 18;
     const OVERHEAD_PCT = 0.12;
@@ -44,10 +44,9 @@ export default async function handler(req, res) {
 
     const { volume_cc=0, area_cm2=0, z_mm=0 } = metrics;
 
-    // Heuristic times
-    const print_time_hr = Math.max(0.2, z_mm / PRINT_SPEED_MM_PER_HR); // ensure nonzero
-    const support_removal_hr = Math.max(0.05, area_cm2 * 0.003); // scales with area
-    const wash_cure_hr = 0.3; // fixed small ops block
+    const print_time_hr = Math.max(0.2, z_mm / PRINT_SPEED_MM_PER_HR);
+    const support_removal_hr = Math.max(0.05, area_cm2 * 0.003);
+    const wash_cure_hr = 0.3;
     const finishing_hr = Math.max(0, area_cm2 * fin.coef);
     const inspection_hr = 0.1;
 
@@ -63,7 +62,7 @@ export default async function handler(req, res) {
     const margin = (base + overhead) * MARGIN_PCT;
 
     const per_unit = (base + overhead + margin) * lt.mult;
-    const unit_price = Math.max(15, per_unit); // minimum ticket
+    const unit_price = Math.max(15, per_unit);
     const batch_total = unit_price * qty;
 
     res.status(200).json({
@@ -83,7 +82,7 @@ export default async function handler(req, res) {
     });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ error: 'Quote error' });
+    try { res.status(500).json({ error: 'Quote error' }); } catch {}
   }
 }
 
