@@ -1,34 +1,42 @@
 // src/components/OverlayMenu.jsx
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-const DURATION = 300; // ms – keep in sync with duration-300 classes
+const DURATION = 320; // ms (matches duration-300/320 below)
 
 export default function OverlayMenu({ open, onClose }) {
-  // `show` keeps it mounted for the close animation
-  // `anim` controls the actual CSS animated state
-  const [show, setShow] = useState(false)
+  // keep mounted while animating out
+  const [mounted, setMounted] = useState(false)
+  // controls animation state (false = off-screen/right)
   const [anim, setAnim] = useState(false)
+  const panelRef = useRef(null)
 
-  // Handle open/close with a next-frame kick so open animates in
   useEffect(() => {
     if (open) {
-      setShow(true)
-      requestAnimationFrame(() => setAnim(true)) // slide/fade IN
+      setMounted(true)
+      setAnim(false) // start closed (translate-x-full)
+      // next tick: force a reflow so the browser commits the "closed" transform,
+      // then flip to "open" so the transition runs.
+      setTimeout(() => {
+        if (!panelRef.current) return
+        void panelRef.current.offsetHeight // force reflow
+        setAnim(true) // slide in
+      }, 0)
     } else {
-      setAnim(false) // slide/fade OUT
-      const t = setTimeout(() => setShow(false), DURATION)
+      // slide out
+      setAnim(false)
+      const t = setTimeout(() => setMounted(false), DURATION)
       return () => clearTimeout(t)
     }
   }, [open])
 
-  // Lock page scroll while the overlay is shown
+  // lock scroll while mounted
   useEffect(() => {
-    document.body.style.overflow = show ? 'hidden' : ''
+    document.body.style.overflow = mounted ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
-  }, [show])
+  }, [mounted])
 
-  if (!show) return null
+  if (!mounted) return null
 
   const items = [
     { to:'/solutions', title:'Solutions', desc:'Explore manufacturing solutions & services' },
@@ -45,16 +53,22 @@ export default function OverlayMenu({ open, onClose }) {
       <button
         aria-label="Close"
         onClick={onClose}
-        className={`absolute inset-0 bg-black/50 transition-opacity duration-300 ease-out ${anim ? 'opacity-100' : 'opacity-0'}`}
+        className={`absolute inset-0 bg-black/50 transition-opacity duration-300 ease-out ${
+          anim ? 'opacity-100' : 'opacity-0'
+        }`}
       />
 
       {/* Panel (slide) */}
       <aside
-        role="dialog" aria-modal="true"
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
         className={`absolute right-0 top-0 h-full w-full max-w-xl bg-white shadow-2xl overflow-y-auto
-                    transition-transform duration-300 ease-out ${anim ? 'translate-x-0' : 'translate-x-full'}`}
+                    transition-transform duration-300 ease-out ${
+                      anim ? 'translate-x-0' : 'translate-x-full'
+                    }`}
       >
-        {/* Top bar – just the close button (removed "Menu" label) */}
+        {/* Close button only (no "Menu" title) */}
         <div className="flex items-center justify-end p-6 border-b">
           <button onClick={onClose} aria-label="Close" className="text-2xl leading-none">×</button>
         </div>
