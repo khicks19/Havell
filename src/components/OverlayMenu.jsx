@@ -2,22 +2,31 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
+const DURATION = 300; // ms – keep in sync with duration-300 classes
+
 export default function OverlayMenu({ open, onClose }) {
-  // Keep mounted during close animation, then unmount.
-  const [show, setShow] = useState(open)
+  // `show` keeps it mounted for the close animation
+  // `anim` controls the actual CSS animated state
+  const [show, setShow] = useState(false)
+  const [anim, setAnim] = useState(false)
 
+  // Handle open/close with a next-frame kick so open animates in
   useEffect(() => {
-    if (open) setShow(true)
-    document.body.style.overflow = open ? 'hidden' : ''
-    return () => { document.body.style.overflow = '' }
-  }, [open])
-
-  useEffect(() => {
-    if (!open && show) {
-      const t = setTimeout(() => setShow(false), 300) // match duration-300
+    if (open) {
+      setShow(true)
+      requestAnimationFrame(() => setAnim(true)) // slide/fade IN
+    } else {
+      setAnim(false) // slide/fade OUT
+      const t = setTimeout(() => setShow(false), DURATION)
       return () => clearTimeout(t)
     }
-  }, [open, show])
+  }, [open])
+
+  // Lock page scroll while the overlay is shown
+  useEffect(() => {
+    document.body.style.overflow = show ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [show])
 
   if (!show) return null
 
@@ -32,26 +41,25 @@ export default function OverlayMenu({ open, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50">
-      {/* Backdrop */}
+      {/* Backdrop (fade) */}
       <button
         aria-label="Close"
         onClick={onClose}
-        className={`absolute inset-0 bg-black/50 transition-opacity duration-300 ease-out ${open ? 'opacity-100' : 'opacity-0'}`}
+        className={`absolute inset-0 bg-black/50 transition-opacity duration-300 ease-out ${anim ? 'opacity-100' : 'opacity-0'}`}
       />
 
-      {/* Sliding panel */}
+      {/* Panel (slide) */}
       <aside
+        role="dialog" aria-modal="true"
         className={`absolute right-0 top-0 h-full w-full max-w-xl bg-white shadow-2xl overflow-y-auto
-                    transition-transform duration-300 ease-out ${open ? 'translate-x-0' : 'translate-x-full'}`}
-        role="dialog"
-        aria-modal="true"
+                    transition-transform duration-300 ease-out ${anim ? 'translate-x-0' : 'translate-x-full'}`}
       >
-        {/* Top bar: just the close button */}
+        {/* Top bar – just the close button (removed "Menu" label) */}
         <div className="flex items-center justify-end p-6 border-b">
           <button onClick={onClose} aria-label="Close" className="text-2xl leading-none">×</button>
         </div>
 
-        {/* Menu items */}
+        {/* Links */}
         <div className="p-6 space-y-6">
           {items.map((it) => (
             <Link key={it.to} to={it.to} onClick={onClose} className="group block relative">
@@ -63,7 +71,7 @@ export default function OverlayMenu({ open, onClose }) {
                 <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-black text-white transition
                                  group-hover:bg-[color:var(--brand-red,#E3362C)]">→</span>
               </div>
-              {/* Animated red underline */}
+              {/* animated red underline */}
               <span className="pointer-events-none absolute left-0 bottom-0 h-0.5 w-full origin-left
                                 scale-x-0 bg-[color:var(--brand-red,#E3362C)]
                                 transition-transform duration-200 group-hover:scale-x-100"></span>
