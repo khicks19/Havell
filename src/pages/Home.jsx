@@ -32,7 +32,7 @@ export default function Home(){
         <blockquote className="text-center text-xl italic">
           “Risk has always been an inescapable part in the pursuit of tomorrow.”
         </blockquote>
-        <figcaption className="mt-2 text-center text-sm text-gray-600">— Kaleb L. Hicks, Founder</figcaption>
+        <figcaption className="mt-2 text-center text-sm text-gray-600">— Kaleb L. Hicks, Founder and CEO </figcaption>
       </figure>
     </section>
   )
