@@ -9,9 +9,25 @@ export default function Layout(){
     <div className="min-h-screen w-full bg-white text-black">
       <header className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 sm:px-8">
-          <Link to="/" className="flex items-center gap-3" aria-label="Havell Home">
-            <LogoImg className="h-20 w-auto sm:h-24" />
-          </Link>
+         <Link to="/" className="group flex items-center" aria-label="Havell Home">
+  {/* Logo icon (always visible) */}
+  <LogoImg className="h-20 w-auto sm:h-24 select-none" />
+
+  {/* Wordmark (slides out on hover/focus) */}
+  <span className="relative overflow-hidden" aria-hidden="true">
+    <span
+      className="block max-w-0 opacity-0 -translate-x-2 ml-0
+                 transition-all duration-300 ease-out
+                 group-hover:max-w-[180px] group-hover:opacity-100 group-hover:translate-x-0 group-hover:ml-2
+                 group-focus-visible:max-w-[180px] group-focus-visible:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:ml-2
+                 motion-reduce:transition-none motion-reduce:transform-none"
+    >
+      <span className="text-lg font-semibold tracking-wide group-hover:text-[color:var(--brand-red,#E3362C)]">
+        HAVELL
+      </span>
+    </span>
+  </span>
+</Link>
 
          {/* hamburger shown on all sizes */}
           <button
