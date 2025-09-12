@@ -10,9 +10,8 @@ export default function Layout(){
       <header className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 sm:px-8">
        <Link to="/" className="flex items-center" aria-label="Havell Home">
-  <LogoImg className="h-20 sm:h-24 w-auto select-none" />
+  <img src="/logo.png" className="h-22 sm:h-26 w-auto select-none" alt="Havell" />
 </Link>
-
 
          {/* hamburger shown on all sizes */}
           <button
