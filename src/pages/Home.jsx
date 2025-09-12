@@ -41,10 +41,11 @@ export default function Home(){
 
   {/* Copy (right) */}
   <div className="order-2 lg:order-2 lg:pl-4">
-    <h2 className="text-2xl font-semibold">About Havell</h2>
+    <h2 className="text-2xl font-semibold">The game has changed</h2>
     <p className="mt-3 text-gray-600 max-w-xl">
-      We combine precision processes with modern materials to deliver fine-detail parts,
-      repeatable quality, and fast lead times for demanding applications.
+      We understand that the past is the past. America will never become that manufacturing powerhouse 
+      all those decades ago, though not in the old way everyone else is thinking. Learn how Havell is 
+      evolving the manufacturing industry.
     </p>
     <div className="mt-6">
       <a href="/about" className="btn btn-outline">About</a>
