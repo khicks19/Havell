@@ -9,12 +9,10 @@ export default function Layout(){
     <div className="min-h-screen w-full bg-white text-black">
       <header className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 sm:px-8">
-        <Link to="/" className="group flex items-center" aria-label="Havell Home">
-  <div className="relative inline-flex">
-    <img src="/logo-wordmark.png" alt="Havell logo" className="h-16 sm:h-20 w-auto select-none" />
-    <span className="logo-orbit"></span>
-  </div>
+       <Link to="/" className="flex items-center" aria-label="Havell Home">
+  <LogoImg className="h-16 sm:h-20 w-auto select-none" />
 </Link>
+
 
          {/* hamburger shown on all sizes */}
           <button
