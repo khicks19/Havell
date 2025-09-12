@@ -48,7 +48,7 @@ export default function Home(){
       evolving the manufacturing industry.
     </p>
     <div className="mt-6">
-      <a href="/about" className="btn btn-outline">About</a>
+      <Link to="/about" className="btn btn-outline">About</Link>
     </div>
   </div>
 </div>
