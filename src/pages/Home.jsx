@@ -44,7 +44,7 @@ export default function Home(){
     <h2 className="text-2xl font-semibold">The game has changed</h2>
     <p className="mt-3 text-gray-600 max-w-xl">
       We understand that the past is the past. America will never become that manufacturing powerhouse 
-      all those decades ago, though not in the old way everyone else is thinking. Learn how Havell is 
+      all those decades ago, atleast not in the old ways. Learn how Havell is 
       evolving the manufacturing industry.
     </p>
     <div className="mt-6">
