@@ -28,6 +28,30 @@ export default function Home(){
         </div>
       </div>
 
+{/* --- Staggered section (image LEFT, text RIGHT) --- */}
+<div className="mt-16 grid gap-10 lg:grid-cols-2 items-start">
+  {/* Image (left on desktop) */}
+  <div className="rounded-2xl overflow-hidden border order-1 lg:order-1">
+    <img
+      className="w-full h-[260px] object-cover filter grayscale"
+      src="https://source.unsplash.com/featured/800x600?factory,robot"
+      alt="Production"
+    />
+  </div>
+
+  {/* Copy (right on desktop) */}
+  <div className="order-2 lg:order-2 lg:pl-4">
+    <h2 className="text-2xl font-semibold">Production-grade quality, on demand</h2>
+    <p className="mt-3 text-gray-600 max-w-xl">
+      Tight tolerances, consistent finishes, and repeatable results—Havell scales from single prototypes
+      to short-run production without compromising detail.
+    </p>
+    <div className="mt-6">
+      <a href="/quote" className="btn btn-primary">Get a Quote</a>
+    </div>
+  </div>
+</div>
+      
       <figure className="mt-16">
         <blockquote className="text-center text-xl italic">
           “Risk has always been an inescapable part in the pursuit of tomorrow.”
