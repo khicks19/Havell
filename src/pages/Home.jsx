@@ -28,9 +28,9 @@ export default function Home(){
         </div>
       </div>
 
-{/* --- Staggered section (image LEFT, text RIGHT) --- */}
+{/* --- Staggered section (image LEFT, text RIGHT) — ABOUT --- */}
 <div className="mt-16 grid gap-10 lg:grid-cols-2 items-start">
-  {/* Image (left on desktop) */}
+  {/* Image (left) */}
   <div className="rounded-2xl overflow-hidden border order-1 lg:order-1">
     <img
       className="w-full h-[260px] object-cover filter grayscale"
@@ -39,18 +39,19 @@ export default function Home(){
     />
   </div>
 
-  {/* Copy (right on desktop) */}
+  {/* Copy (right) */}
   <div className="order-2 lg:order-2 lg:pl-4">
-    <h2 className="text-2xl font-semibold">Production-grade quality, on demand</h2>
+    <h2 className="text-2xl font-semibold">About Havell</h2>
     <p className="mt-3 text-gray-600 max-w-xl">
-      Tight tolerances, consistent finishes, and repeatable results—Havell scales from single prototypes
-      to short-run production without compromising detail.
+      We combine precision processes with modern materials to deliver fine-detail parts,
+      repeatable quality, and fast lead times for demanding applications.
     </p>
     <div className="mt-6">
-      <a href="/quote" className="btn btn-primary">Get a Quote</a>
+      <a href="/about" className="btn btn-outline">About</a>
     </div>
   </div>
 </div>
+
       
       <figure className="mt-16">
         <blockquote className="text-center text-xl italic">
