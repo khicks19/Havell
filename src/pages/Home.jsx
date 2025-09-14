@@ -82,7 +82,21 @@ export default function Home(){
   </div>
 </div>
 
-      
+      {/* --- Commitment / CTA (centered) --- */}
+<section className="mt-16">
+  <div className="mx-auto max-w-3xl rounded-2xl border p-8 sm:p-10 text-center">
+    <h2 className="text-2xl font-semibold">Excellence, built here</h2>
+    <p className="mt-3 text-gray-600">
+      At Havell, we strive for excellence on every part. We care about our clients—clear
+      communication, dependable lead times, and results that stand up to scrutiny. We deliver
+      the highest quality in the industry, and we do it right here on American soil.
+    </p>
+    <div className="mt-6">
+      <Link to="/contact" className="btn btn-primary">Contact Us</Link>
+    </div>
+  </div>
+</section>
+
       <figure className="mt-16">
         <blockquote className="text-center text-xl italic">
           “Risk has always been an inescapable part in the pursuit of tomorrow.”
