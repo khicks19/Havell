@@ -53,6 +53,35 @@ export default function Home(){
   </div>
 </div>
 
+      {/* --- Staggered section (text LEFT, image RIGHT) — FAQ --- */}
+<div className="mt-16 grid gap-10 lg:grid-cols-2 items-start">
+  {/* Copy (left) */}
+  <div>
+    <h2 className="text-2xl font-semibold">New to additive manufacturing?</h2>
+    <p className="mt-3 text-gray-600 max-w-xl">
+      Our FAQ explains the basics—file types, materials, finishes, pricing, and lead times—
+      so you can move from idea to part with confidence.
+    </p>
+    <ul className="mt-3 list-disc list-inside text-sm text-gray-600">
+      <li>What files do we accept?</li>
+      <li>How pricing is calculated</li>
+      <li>Material/finish recommendations</li>
+    </ul>
+    <div className="mt-6">
+      <Link to="/faq" className="btn btn-outline">FAQ</Link>
+    </div>
+  </div>
+
+  {/* Image (right) */}
+  <div className="rounded-2xl overflow-hidden border">
+    <img
+      className="w-full h-[260px] object-cover filter grayscale"
+      src="/faq.jpg"               /* replace with your own image */
+      alt="FAQ and getting started guides"
+    />
+  </div>
+</div>
+
       
       <figure className="mt-16">
         <blockquote className="text-center text-xl italic">
