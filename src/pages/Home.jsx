@@ -25,7 +25,7 @@ export default function Home(){
         </div>
         <div className="rounded-2xl overflow-hidden border">
          <img
-  className="w-full h-[260px] object-cover filter grayscale"
+  className="w-full h-[260px] object-cover"
   src="/parts.jpg"                // <-- starts with a single slash
   alt="Parts"
   loading="lazy" decoding="async"
