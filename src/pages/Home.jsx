@@ -1,20 +1,23 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import HeroYouTube from "../components/HeroYouTube";
 
 export default function Home(){
   return (
     <section className="mx-auto max-w-7xl px-6 sm:px-8 py-10">
-      <div className="relative overflow-hidden rounded-2xl border h-[360px] sm:h-[420px]">
-  {/* Background YouTube snippet */}
-  <HeroYouTube
-    videoId="yW4EbCWaJHE"  // your video
-    start={42}             // snippet start (seconds)
-    end={51.8}               // snippet end (seconds)
-    grayscale={false}       // set to false for color
+     {/* HERO — local MP4 */}
+<div className="relative overflow-hidden rounded-2xl border aspect-[21/9] sm:aspect-[16/9]">
+  <video
+    className="absolute inset-0 h-full w-full object-cover object-center"
+    src="/hero.mp4"
+    poster="/hero-poster.jpg"
+    autoPlay
+    muted
+    loop
+    playsInline
+    preload="metadata"
+    aria-hidden="true"
   />
-
-  {/* Existing overlay content */}
+  {/* overlay content (keep yours) */}
   <div className="absolute inset-0 flex flex-col items-start justify-center p-8 sm:p-12">
     <h1 className="text-4xl font-bold sm:text-5xl text-white drop-shadow">
       Engineered for your success.
