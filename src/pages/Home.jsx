@@ -42,7 +42,7 @@ export default function Home(){
   {/* Image (left) */}
   <div className="rounded-2xl overflow-hidden border order-1 lg:order-1">
    <img className="w-full h-[260px] object-cover"
-     src="/production.jpg"
+     src="/production.png"
      alt="Production" loading="lazy" decoding="async" 
  />
   </div>
