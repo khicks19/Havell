@@ -24,7 +24,12 @@ export default function Home(){
           </div>
         </div>
         <div className="rounded-2xl overflow-hidden border">
-          <img className="w-full h-[260px] object-cover filter grayscale" src="https://source.unsplash.com/featured/800x600?industrial,metal" alt="Parts" />
+         <img
+  className="w-full h-[260px] object-cover filter grayscale"
+  src="/parts.jpg"                // <-- starts with a single slash
+  alt="Parts"
+  loading="lazy" decoding="async"
+/>
         </div>
       </div>
 
