@@ -1,23 +1,30 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import HeroYouTube from "../components/HeroYouTube";
 
 export default function Home(){
   return (
     <section className="mx-auto max-w-7xl px-6 sm:px-8 py-10">
-      <div className="relative overflow-hidden rounded-2xl border">
-        <img
-  className="h-[360px] w-full object-cover"
-  src="/hero.jpg"
-  alt="Havell—precision additive manufacturing hero"
-/>
-        <div className="absolute inset-0 flex flex-col items-start justify-center p-8 sm:p-12">
-          <h1 className="text-4xl font-bold sm:text-5xl text-white drop-shadow">Engineered for your success.</h1>
-          <div className="mt-6 flex gap-3">
-            <Link to="/quote" className="btn btn-primary">Instant Quote</Link>
-            <Link to="/solutions" className="btn btn-outline">What We Do</Link>
-          </div>
-        </div>
-      </div>
+      <div className="relative overflow-hidden rounded-2xl border h-[360px] sm:h-[420px]">
+  {/* Background YouTube snippet */}
+  <HeroYouTube
+    videoId="yW4EbCWaJHE"  // your video
+    start={74}             // snippet start (seconds)
+    end={88}               // snippet end (seconds)
+    grayscale={false}       // set to false for color
+  />
+
+  {/* Existing overlay content */}
+  <div className="absolute inset-0 flex flex-col items-start justify-center p-8 sm:p-12">
+    <h1 className="text-4xl font-bold sm:text-5xl text-white drop-shadow">
+      Engineered for your success.
+    </h1>
+    <div className="mt-6 flex gap-3">
+      <Link to="/quote" className="btn btn-primary">Instant Quote</Link>
+      <Link to="/solutions" className="btn btn-outline">What We Do</Link>
+    </div>
+  </div>
+</div>
 
       <div className="mt-10 grid gap-10 lg:grid-cols-2 items-start">
         <div>
