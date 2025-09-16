@@ -30,10 +30,9 @@ export default function Solutions() {
         {/* End-Use Components */}
         <div className="group rounded-2xl border p-5">
           <h3 className="font-semibold">End-Use Components</h3>
-          <p className="text-sm text-gray-600">Low-volume production with engineering resins.</p>
+          <p className="text-sm text-gray-600">Low/medium-volume production parts.</p>
           <img
-            className="mt-3 w-full aspect-[16/10] object-cover rounded-xl border
-                       filter grayscale transition duration-300 group-hover:grayscale-0"
+            className="mt-3 w-full aspect-[16/10] object-cover rounded-xl border"
             src="/solutions/enduse.jpg"
             alt="End-use components"
             loading="lazy" decoding="async"
@@ -43,10 +42,9 @@ export default function Solutions() {
         {/* Tooling & Fixtures */}
         <div className="group rounded-2xl border p-5">
           <h3 className="font-semibold">Tooling &amp; Fixtures</h3>
-          <p className="text-sm text-gray-600">Jigs, fixtures, and production aids.</p>
+          <p className="text-sm text-gray-600">Jigs, fixtures, molds, and production aids.</p>
           <img
-            className="mt-3 w-full aspect-[16/10] object-cover rounded-xl border
-                       filter grayscale transition duration-300 group-hover:grayscale-0"
+            className="mt-3 w-full aspect-[16/10] object-cover rounded-xl border"
             src="/solutions/tooling.jpg"
             alt="Tooling and fixtures"
             loading="lazy" decoding="async"
@@ -58,8 +56,7 @@ export default function Solutions() {
           <h3 className="font-semibold">Electronics</h3>
           <p className="text-sm text-gray-600">Enclosures and precise brackets.</p>
           <img
-            className="mt-3 w-full aspect-[16/10] object-cover rounded-xl border
-                       filter grayscale transition duration-300 group-hover:grayscale-0"
+            className="mt-3 w-full aspect-[16/10] object-cover rounded-xl border"
             src="/solutions/electronics.jpg"
             alt="Electronics enclosures and brackets"
             loading="lazy" decoding="async"
@@ -71,8 +68,7 @@ export default function Solutions() {
           <h3 className="font-semibold">Medical &amp; R&amp;D</h3>
           <p className="text-sm text-gray-600">Fine-detail models and components.</p>
           <img
-            className="mt-3 w-full aspect-[16/10] object-cover rounded-xl border
-                       filter grayscale transition duration-300 group-hover:grayscale-0"
+            className="mt-3 w-full aspect-[16/10] object-cover rounded-xl border"
             src="/solutions/medical.jpg"
             alt="Medical and R&D prints"
             loading="lazy" decoding="async"
@@ -82,10 +78,9 @@ export default function Solutions() {
         {/* Aerospace/Automotive */}
         <div className="group rounded-2xl border p-5">
           <h3 className="font-semibold">Aerospace/Automotive</h3>
-          <p className="text-sm text-gray-600">Lightweight brackets and ducts.</p>
+          <p className="text-sm text-gray-600">Lightweight brackets, ducts, panels, etc. Non-critical parts.</p>
           <img
-            className="mt-3 w-full aspect-[16/10] object-cover rounded-xl border
-                       filter grayscale transition duration-300 group-hover:grayscale-0"
+            className="mt-3 w-full aspect-[16/10] object-cover rounded-xl border"
             src="/solutions/aerospace.jpg"
             alt="Aerospace and automotive components"
             loading="lazy" decoding="async"
