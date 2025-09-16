@@ -10,7 +10,7 @@ export default function Home(){
   <HeroYouTube
     videoId="yW4EbCWaJHE"  // your video
     start={42}             // snippet start (seconds)
-    end={51}               // snippet end (seconds)
+    end={52}               // snippet end (seconds)
     grayscale={false}       // set to false for color
   />
 
