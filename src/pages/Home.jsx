@@ -5,7 +5,11 @@ export default function Home(){
   return (
     <section className="mx-auto max-w-7xl px-6 sm:px-8 py-10">
       <div className="relative overflow-hidden rounded-2xl border">
-        <img className="h-[360px] w-full object-cover filter grayscale" src="https://source.unsplash.com/featured/1600x900?manufacturing" alt="Hero" />
+        <img
+  className="h-[360px] w-full object-cover"
+  src="/hero.jpg"
+  alt="Havell—precision additive manufacturing hero"
+/>
         <div className="absolute inset-0 flex flex-col items-start justify-center p-8 sm:p-12">
           <h1 className="text-4xl font-bold sm:text-5xl text-white drop-shadow">Engineered for your success.</h1>
           <div className="mt-6 flex gap-3">
@@ -37,11 +41,10 @@ export default function Home(){
 <div className="mt-16 grid gap-10 lg:grid-cols-2 items-start">
   {/* Image (left) */}
   <div className="rounded-2xl overflow-hidden border order-1 lg:order-1">
-    <img
-      className="w-full h-[260px] object-cover filter grayscale"
-      src="https://source.unsplash.com/featured/800x600?factory,robot"
-      alt="Production"
-    />
+   <img className="w-full h-[260px] object-cover"
+     src="/production.jpg"
+     alt="Production" loading="lazy" decoding="async" 
+ />
   </div>
 
   {/* Copy (right) */}
