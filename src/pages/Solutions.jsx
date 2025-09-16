@@ -8,7 +8,7 @@ export default function Solutions() {
 
       {/* Intro text under the title */}
       <p className="mt-3 text-gray-600 max-w-3xl">
-        From rapid prototyping to end-use production, Havell delivers precision SLA parts with
+        From rapid prototyping to end-use production, Havell delivers precision parts with
         exceptional surface finish and dimensional accuracy. We help you validate designs, reduce
         tooling risk, and ship reliable components—fast.
       </p>
@@ -20,8 +20,7 @@ export default function Solutions() {
           <h3 className="font-semibold">Rapid Prototyping</h3>
           <p className="text-sm text-gray-600">Quick-turn parts to validate fit, form, and function.</p>
           <img
-            className="mt-3 w-full aspect-[16/10] object-cover rounded-xl border
-                       filter grayscale transition duration-300 group-hover:grayscale-0"
+            className="mt-3 w-full aspect-[16/10] object-cover rounded-xl border"
             src="/solutions/rapid.jpg"
             alt="Rapid prototyping"
             loading="lazy" decoding="async"
