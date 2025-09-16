@@ -9,8 +9,8 @@ export default function Solutions() {
       {/* Intro text under the title */}
       <p className="mt-3 text-gray-600 max-w-3xl">
         From rapid prototyping to end-use production, Havell delivers precision parts with
-        exceptional surface finish and dimensional accuracy. We help you validate designs, reduce
-        tooling risk, and ship reliable components—fast.
+        exceptional surface finish, strength, dimensional accuracy. We help you validate designs, reduce
+        risk, and ship reliable components—fast.
       </p>
 
       {/* Cards */}
