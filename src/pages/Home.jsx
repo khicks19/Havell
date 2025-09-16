@@ -9,8 +9,8 @@ export default function Home(){
   {/* Background YouTube snippet */}
   <HeroYouTube
     videoId="yW4EbCWaJHE"  // your video
-    start={74}             // snippet start (seconds)
-    end={88}               // snippet end (seconds)
+    start={42}             // snippet start (seconds)
+    end={51}               // snippet end (seconds)
     grayscale={false}       // set to false for color
   />
 
