@@ -166,8 +166,7 @@ export default function Materials() {
 
       {/* caption under title */}
       <p className="mt-3 text-gray-600 max-w-3xl">
-        Explore our SLA materials for prototypes and end-use parts. Choose <em>All</em> to see
-        everything, or filter by <strong>Formlabs SLA</strong> and select a use category. Stars
+        Explore our wide range materials for prototypes, end-use parts, and more. Using only the best materials like Formlabs proprietary resins/powders for SLA/SLS, EOS metal powders (DLS), and TRUMPf metal powders (DMLS)! Stars
         indicate how many use categories a material supports.
       </p>
 
