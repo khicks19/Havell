@@ -93,9 +93,7 @@ export default function Solutions() {
   {/* Note card (full-ish width) */}
   <div className="w-full max-w-4xl rounded-2xl border p-5 bg-white">
     <p className="text-sm text-gray-600">
-      <strong>Note:</strong> If a solution isn’t listed here, reach out — we will try our best to support it
-      or recommend the right approach! We’re happy to advise on materials, tolerances, and
-      production feasibility.
+      <strong>Note:</strong> As Havell is a new company, some solutions like SLS, DMLS, and laser cutting are very limted. As time goes on we will begin to role out these improvemnts as quickly as possible. Thank you for your understanding!
     </p>
   </div>
 
