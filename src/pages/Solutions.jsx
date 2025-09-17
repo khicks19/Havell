@@ -85,8 +85,30 @@ export default function Solutions() {
             alt="Aerospace and automotive components"
             loading="lazy" decoding="async"
           />
-        </div>
-      </div>
+
+{/* Note + CTA — stacked & centered */}
+<div className="mt-10 flex flex-col items-center gap-6">
+  {/* Note card (full-ish width) */}
+  <div className="w-full max-w-4xl rounded-2xl border p-5 bg-white">
+    <p className="text-sm text-gray-600">
+      <strong>Note:</strong> If a solution isn’t listed here, reach out — we will try our best to support it
+      or recommend the right approach! We’re happy to advise on materials, tolerances, and
+      production feasibility.
+    </p>
+  </div>
+
+  {/* Contact/CTA card (narrower) */}
+  <div className="w-full max-w-md rounded-2xl border p-6 text-center">
+    <h3 className="text-lg font-semibold">Start a project</h3>
+    <p className="mt-2 text-sm text-gray-600">
+      Questions or concerns? Tell us about your part, and we’ll help you choose a solution
+      and get you a fast quote.
+    </p>
+    <div className="mt-4">
+      <Link to="/contact" className="btn btn-primary">Start a Project</Link>
+    </div>
+  </div>
+</div>
     </section>
   );
 }
