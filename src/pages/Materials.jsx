@@ -170,6 +170,16 @@ export default function Materials() {
         indicate how many use categories a material supports.
       </p>
 
+      {/* Note (same style vibe as Solutions) */}
+<div className="mt-4 rounded-2xl border p-5 bg-white max-w-4xl">
+  <p className="text-sm text-gray-600">
+    <strong>Note:</strong> As Havell is a new company, some solutions like SLS, DMLS, and laser
+    cutting are very limited. As time goes on we will begin to roll out these improvements as
+    quickly as possible. Thank you for your understanding!
+  </p>
+</div>
+
+
       {/* filters */}
       <div className="mt-6 flex items-center gap-3">
         <button
