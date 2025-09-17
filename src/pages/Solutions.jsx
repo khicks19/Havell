@@ -85,6 +85,8 @@ export default function Solutions() {
             alt="Aerospace and automotive components"
             loading="lazy" decoding="async"
           />
+        </div>
+      </div>
 
 {/* Note + CTA — stacked & centered */}
 <div className="mt-10 flex flex-col items-center gap-6">
@@ -109,7 +111,7 @@ export default function Solutions() {
     </div>
   </div>
 </div>
-    </section>
+</section>
   );
 }
 
