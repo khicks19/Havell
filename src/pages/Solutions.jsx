@@ -11,8 +11,6 @@ export default function Solutions() {
         From rapid prototyping to end-use production, Havell delivers precision parts with
         exceptional surface finish, strength, and dimensional accuracy. We help you validate designs, reduce
         risk, and ship reliable components—fast.
-
-        Note: As we are a new company, some services like SLS, DMLS, and sheet cutting, may be limited.
       </p>
 
       {/* Cards */}
