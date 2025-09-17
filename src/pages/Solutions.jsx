@@ -101,8 +101,8 @@ export default function Solutions() {
   <div className="w-full max-w-md rounded-2xl border p-6 text-center">
     <h3 className="text-lg font-semibold">Start a project</h3>
     <p className="mt-2 text-sm text-gray-600">
-      Questions or concerns? Tell us about your part, and we’ll help you choose a solution
-      and get you a fast quote.
+      Questions or concerns? Have a special request? Tell us about your part, and we’ll help you choose a solution
+      and get you a fast quote as soon as possible!
     </p>
     <div className="mt-4">
       <Link to="/contact" className="btn btn-primary">Contact</Link>
