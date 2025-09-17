@@ -105,7 +105,7 @@ export default function Solutions() {
       and get you a fast quote.
     </p>
     <div className="mt-4">
-      <Link to="/contact" className="btn btn-primary">Start a Project</Link>
+      <Link to="/contact" className="btn btn-primary">Contact</Link>
     </div>
   </div>
 </div>
