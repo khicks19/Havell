@@ -90,10 +90,31 @@ export default function Solutions() {
         </div>
       </div>
 
-      {/* CTA */}
-      <div className="mt-12 text-center">
-        <Link to="/contact" className="btn btn-primary">Start a Project</Link>
-      </div>
+    {/* Note + CTA row */}
+<div className="mt-10 grid gap-6 lg:grid-cols-3 items-stretch">
+  {/* Left: small note */}
+  <div className="lg:col-span-2">
+    <div className="rounded-2xl border p-5 bg-white">
+      <p className="text-sm text-gray-600">
+        <strong>Note:</strong> If a solution isn’t listed here, reach out — we can usually support it
+        or recommend the right approach. We’re happy to advise on materials, tolerances, and
+        production feasibility.
+      </p>
+    </div>
+  </div>
+
+  {/* Right: boxed CTA (like Contact) */}
+  <div className="rounded-2xl border p-6 text-center">
+    <h3 className="text-lg font-semibold">Start a project</h3>
+    <p className="mt-2 text-sm text-gray-600">
+      Questions or concerns? Tell us about your part, and we’ll help you choose a solution and get
+      you a fast quote.
+    </p>
+    <div className="mt-4">
+      <Link to="/contact" className="btn btn-primary">Start a Project</Link>
+    </div>
+  </div>
+</div>
     </section>
   );
 }
