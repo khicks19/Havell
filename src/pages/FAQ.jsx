@@ -257,7 +257,7 @@ export default function FAQ() {
       <div className="mt-14 rounded-xl border bg-white p-6 text-center">
         <h3 className="text-lg font-semibold">Still have a question?</h3>
         <p className="mt-2 text-gray-600">
-          Tell us about your part and requirements—we’ll reply within 1–2 business days.
+          Tell us about your part and requirements—we’ll reply within 24 hours!.
         </p>
         <div className="mt-4">
           <Link to="/contact" className="btn btn-primary">
