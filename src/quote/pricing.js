@@ -1,56 +1,58 @@
-import { QUOTE_DEFAULTS } from './config';
-import { getMaterial } from './materialsData';
+// src/quote/pricing.js
+import { QUOTE_DEFAULTS, MATERIALS } from "./config";
 
-// Convert resin $/L to $/cm3
-function resinUsdPerCm3(resinCostPerL) {
-  // 1 liter = 1000 cm3
-  return resinCostPerL / 1000;
+// $ helpers
+export function formatUSD(n) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: QUOTE_DEFAULTS.currency || "USD",
+    maximumFractionDigits: 2,
+  }).format(n);
 }
+const cm3FromMm3 = (mm3) => mm3 / 1000;
 
 /**
- * quotePrice
- * @param {Object} args
- * @param {number} args.volumeMm3      - raw part volume (from STL)
- * @param {Object} args.bbox           - {x,y,z} in mm
- * @param {string} args.materialId
- * @returns {Object} { material, timeHours, resinCm3, cost: { resin, machine, labor, total }, total }
+ * pricePart
+ * Simple, explainable calculator:
+ * - Resin cost from volume (with supportWaste)
+ * - Time from effective volume / build rate, then multiply by postProcessFactor
+ * - Machine + labor from time * hourly rates
+ * - Min price guard
  */
-export function quotePrice({ volumeMm3, bbox, materialId }) {
-  const mat = getMaterial(materialId);
-  if (!mat) throw new Error('Unknown material');
+export default function pricePart({ volumeMm3, bbox, materialKey, qty = 1, rush = false }) {
+  const m = MATERIALS[materialKey];
+  if (!m) throw new Error("Unknown material: " + materialKey);
 
-  const { supportFactor, postProcessFactor, zSafetyMm, minPrice } = QUOTE_DEFAULTS;
+  const volumeCm3 = cm3FromMm3(volumeMm3);
+  const effectiveCm3 = volumeCm3 * (1 + (m.supportWaste || 0.12));
+  const timeHours = (effectiveCm3 / Math.max(1e-6, m.buildRateCm3H)) * (m.postProcessFactor || 1.15);
 
-  // Geometry/volume
-  const partCm3 = (volumeMm3 / 1000);            // mm3 -> cm3
-  const effectiveCm3 = partCm3 * supportFactor;   // add supports/waste
+  const resinCost = effectiveCm3 * (m.resinCostPerL / 1000); // $/L ÷ 1000 = $/cm3
+  const machineCost = timeHours * (m.machineRatePerHour || 18);
+  const laborCost = timeHours * (m.laborRatePerHour || 16);
 
-  // Build height (mm)
-  const heightMm = bbox.z + zSafetyMm;
+  let perPart = resinCost + machineCost + laborCost;
+  perPart = Math.max(m.minPrice || 18, perPart);
 
-  // Time estimate from throughput (cm3/hr)
-  const rawTimeHours = effectiveCm3 / Math.max(1e-6, mat.buildRateCm3PerHour);
-  const timeHours = rawTimeHours * (postProcessFactor); // include wash/cure/handling
+  let total = perPart * qty;
+  if (rush) total *= QUOTE_DEFAULTS.rushMultiplier || 1.4;
 
-  // Costs
-  const resinCost = effectiveCm3 * resinUsdPerCm3(mat.resinCostPerL);
-  const machineCost = timeHours * mat.machineRatePerHour;
-  const laborCost = timeHours * mat.laborRatePerHour;
-
-  const subtotal = resinCost + machineCost + laborCost;
-  const total = Math.max(minPrice, Math.round(subtotal * 100) / 100);
+  // round to cents
+  const round = (n) => Math.round(n * 100) / 100;
 
   return {
-    material: mat,
-    resinCm3: Math.round(effectiveCm3 * 100) / 100,
-    timeHours: Math.round(timeHours * 100) / 100,
-    heightMm: Math.round(heightMm * 100) / 100,
-    cost: {
-      resin: Math.round(resinCost * 100) / 100,
-      machine: Math.round(machineCost * 100) / 100,
-      labor: Math.round(laborCost * 100) / 100,
-      total,
+    material: { key: materialKey, label: m.label },
+    resinCm3: round(effectiveCm3),
+    timeHours: round(timeHours),
+    heightMm: Math.round((bbox?.[2] || 0) * 100) / 100,
+    breakdown: {
+      resinCost: round(resinCost),
+      machineCost: round(machineCost),
+      laborCost: round(laborCost),
+      perPart: round(perPart),
+      qty,
+      rushApplied: rush ? QUOTE_DEFAULTS.rushMultiplier : 1,
     },
-    total,
+    total: round(total),
   };
 }
