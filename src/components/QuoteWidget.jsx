@@ -1,147 +1,125 @@
-import React, { useMemo, useState } from 'react'
-import { parseSTL } from '../quote/parseStl'
-import { MATERIALS, FINISH_LEVELS, LEAD_TIMES } from '../quote/PricingConfig'
+// src/components/QuoteWidget.jsx
+import React, { useMemo, useState } from "react";
+import { parseStl } from "../quote/parseStl";
+import { MATERIALS } from "../quote/config";
+import { pricePart, formatUSD } from "../quote/pricing";
 
 export default function QuoteWidget() {
-  const [file, setFile] = useState(null)
-  const [units, setUnits] = useState('mm')
-  const [stats, setStats] = useState(null)
-  const [material, setMaterial] = useState(MATERIALS[0].id)
-  const [finish, setFinish] = useState(FINISH_LEVELS[0].id)
-  const [lead, setLead] = useState(LEAD_TIMES[0].id)
-  const [qty, setQty] = useState(1)
-  const [loading, setLoading] = useState(false)
-  const [quote, setQuote] = useState(null)
-  const [error, setError] = useState(null)
+  const [units, setUnits] = useState("mm");  // "mm" | "in"
+  const [material, setMaterial] = useState("Grey V5");
+  const [qty, setQty] = useState(1);
+  const [rush, setRush] = useState(false);
+  const [metrics, setMetrics] = useState(null);
+  const [price, setPrice] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
 
-  const materialObj = useMemo(() => MATERIALS.find(m => m.id === material), [material])
-  const finishObj = useMemo(() => FINISH_LEVELS.find(f => f.id === finish), [finish])
-  const leadObj = useMemo(() => LEAD_TIMES.find(l => l.id === lead), [lead])
+  const materialKeys = Object.keys(MATERIALS);
 
-  async function handleParse() {
-    if (!file) return
-    setError(null)
-    setLoading(true)
+  async function onFile(e) {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    setErr(""); setBusy(true); setPrice(null);
     try {
-      const parsed = await parseSTL(file, units)
-      setStats(parsed)
+      const { volumeMm3, areaMm2, bbox } = await parseStl(f);
+      setMetrics({ volumeMm3, areaMm2, bbox });
     } catch (e) {
-      console.error(e)
-      setError(e.message || 'Failed to parse STL')
+      console.error(e);
+      setErr("Sorry—couldn't read that STL. Try re-exporting (binary STL preferred).");
     } finally {
-      setLoading(false)
+      setBusy(false);
     }
   }
 
-  async function handleQuote() {
-    if (!stats) return;
-    setLoading(true);
-    setError(null);
-    setQuote(null);
-    try {
-      const res = await fetch('/api/quote', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          material,
-          finish,
-          lead,
-          qty: Number(qty),
-          metrics: { volume_cc: stats.volume_cc, area_cm2: stats.area_cm2, z_mm: stats.z_mm, bbox: stats.bbox }
-        })
-      });
-      const contentType = res.headers.get('content-type') || '';
-      let data;
-      if (contentType.includes('application/json')) { data = await res.json(); }
-      else { throw new Error('API endpoint not running yet (deploy to Vercel or use `vercel dev`).'); }
-      if (!res.ok) throw new Error(data?.error || 'Quote failed');
-      if (!data?.totals) throw new Error('Malformed response from API');
-      setQuote(data);
-    } catch (e) {
-      console.error(e); setError(e.message || 'Failed to get quote');
-    } finally { setLoading(false); }
+  function toDisplay(valMm) {
+    return units === "mm" ? valMm : valMm / 25.4;
   }
 
+  function compute() {
+    if (!metrics) return;
+    const maxZ = metrics.bbox.size[2]; // mm
+    const res = pricePart({
+      volumeMm3: metrics.volumeMm3,
+      maxZmm: maxZ,
+      materialKey: material,
+      qty: Number(qty) || 1,
+      rush
+    });
+    setPrice(res);
+  }
+
+  const bbox = metrics?.bbox?.size || [0,0,0];
+  const volDisp = units === "mm" ? (metrics?.volumeMm3 || 0) : (metrics?.volumeMm3 || 0) / 16387.064; // mm³ to in³
+
   return (
-    <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-      <div className="rounded-2xl border p-6">
-        <div className="text-sm">1) Upload CAD (.stl)</div>
-        <input type="file" accept=".stl" className="mt-2 block w-full text-sm file:mr-4 file:rounded-full file:border file:bg-black file:text-white file:px-3 file:py-2 hover:file:bg-white hover:file:text-[color:var(--brand-red,#E3362C)] hover:file:border-[color:var(--brand-red,#E3362C)]" onChange={(e)=>{ setFile(e.target.files?.[0]||null); setStats(null); setQuote(null); setError(null)}}/>
+    <div className="rounded-xl border p-6">
+      <div className="grid gap-6 md:grid-cols-2">
+        <div>
+          <label className="block text-sm font-medium">Upload STL</label>
+          <input type="file" accept=".stl" onChange={onFile}
+                 className="mt-2 block w-full rounded-lg border p-2" />
+          <div className="mt-4 flex gap-3">
+            <label className="flex items-center gap-2">
+              <input type="radio" name="units" value="mm" checked={units === "mm"} onChange={() => setUnits("mm")} />
+              <span>mm</span>
+            </label>
+            <label className="flex items-center gap-2">
+              <input type="radio" name="units" value="in" checked={units === "in"} onChange={() => setUnits("in")} />
+              <span>inches</span>
+            </label>
+          </div>
 
-        <div className="mt-3 flex items-center gap-4 text-sm">
-          <label className="flex items-center gap-2"><input type="radio" name="units" value="mm" checked={units==='mm'} onChange={()=>setUnits('mm')} /><span>mm</span></label>
-          <label className="flex items-center gap-2"><input type="radio" name="units" value="in" checked={units==='in'} onChange={()=>setUnits('in')} /><span>inches</span></label>
+          {metrics && (
+            <div className="mt-4 text-sm text-gray-700 space-y-1">
+              <div><span className="font-medium">Volume:</span> {units === "mm" ? `${metrics.volumeMm3.toFixed(0)} mm³` : `${volDisp.toFixed(2)} in³`}</div>
+              <div><span className="font-medium">Bounding box:</span> {toDisplay(bbox[0]).toFixed(2)} × {toDisplay(bbox[1]).toFixed(2)} × {toDisplay(bbox[2]).toFixed(2)} {units}</div>
+            </div>
+          )}
+          {err && <p className="mt-3 text-sm text-red-600">{err}</p>}
         </div>
 
-        <button onClick={handleParse} disabled={!file||loading} className="btn btn-outline mt-4 disabled:opacity-50">{loading?'Parsing…':'Analyze Model'}</button>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium">Material</label>
+            <select className="mt-2 w-full rounded-lg border p-2"
+                    value={material} onChange={e => setMaterial(e.target.value)}>
+              {materialKeys.map(k => <option key={k} value={k}>{k}</option>)}
+            </select>
+          </div>
 
-        <hr className="my-6" />
+          <div className="flex gap-4">
+            <div className="flex-1">
+              <label className="block text-sm font-medium">Quantity</label>
+              <input type="number" min={1} value={qty}
+                     onChange={e => setQty(e.target.value)}
+                     className="mt-2 w-full rounded-lg border p-2" />
+            </div>
+            <div className="flex items-end">
+              <label className="flex items-center gap-2 mb-1">
+                <input type="checkbox" checked={rush} onChange={e => setRush(e.target.checked)} />
+                <span>Rush</span>
+              </label>
+            </div>
+          </div>
 
-        <div className="text-sm">2) Choose options</div>
-        <div className="mt-3 grid grid-cols-1 gap-3">
-          <Select label="Material" value={material} onChange={setMaterial} options={MATERIALS} />
-          <Select label="Finish" value={finish} onChange={setFinish} options={FINISH_LEVELS} />
-          <Select label="Lead time" value={lead} onChange={setLead} options={LEAD_TIMES} />
-          <Number label="Quantity" value={qty} onChange={setQty} min={1} />
+          <button disabled={!metrics || busy}
+                  onClick={compute}
+                  className="btn btn-primary disabled:opacity-50">
+            {busy ? "Analyzing…" : "Get Price"}
+          </button>
+
+          {price && (
+            <div className="mt-4 rounded-lg border p-4 text-sm">
+              <div className="text-lg font-semibold">Total: {formatUSD(price.total)}</div>
+              <div className="mt-2 text-gray-600 space-y-1">
+                <div>Per-part: {formatUSD(price.partPrice)} (qty {Number(qty)})</div>
+                <div>Est. print time: {price.timeHours.toFixed(2)} hr</div>
+                <div>Material vol: {price.volumeCm3.toFixed(2)} cm³</div>
+              </div>
+            </div>
+          )}
         </div>
-
-        <button onClick={handleQuote} disabled={!stats||loading} className="btn btn-primary mt-4 disabled:opacity-50">{loading?'Quoting…':'Get Price'}</button>
-
-        {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
-      </div>
-
-      <div className="rounded-2xl border p-6">
-        <div className="text-sm">Model metrics</div>
-        {stats ? (
-          <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
-            <Metric label="Triangles" value={stats.triangles.toLocaleString()} />
-            <Metric label="Volume" value={`${stats.volume_cc.toFixed(2)} cc`} />
-            <Metric label="Surface Area" value={`${stats.area_cm2.toFixed(2)} cm²`} />
-            <Metric label="Z Height" value={`${stats.z_mm.toFixed(1)} mm`} />
-            <div className="col-span-2">
-              <div className="text-gray-600">Bounding Box (mm)</div>
-              <div className="mt-1 rounded-md border px-3 py-2">{stats.bbox.size_mm.map(n=>n.toFixed(1)).join(' × ')}</div>
-            </div>
-            <div className="col-span-2 text-xs text-gray-600 mt-2">Units assumed: <b>{units}</b>. If your STL was exported in inches, toggle accordingly.</div>
-          </div>
-        ) : (
-          <p className="mt-3 text-sm text-gray-600">Upload and analyze a model to see metrics.</p>
-        )}
-      </div>
-
-      <div className="rounded-2xl border p-6">
-        <div className="text-sm">Quote</div>
-        {quote ? (
-          <div className="mt-3 text-sm">
-            <div className="text-xl font-semibold">${Number(quote?.totals?.unit_price ?? 0).toFixed(2)} <span className="text-sm text-gray-600">/ unit</span></div>
-            <div className="mt-1">Qty {quote?.input?.qty} → <b>${Number(quote?.totals?.batch_total ?? 0).toFixed(2)}</b></div>
-            <div className="mt-4 rounded-xl border p-3 bg-gray-50">
-              <div className="font-medium">Breakdown</div>
-              <ul className="mt-2 space-y-1">
-                <li>Material: ${Number(quote?.breakdown?.material ?? 0).toFixed(2)}</li>
-                <li>Print time: ${Number(quote?.breakdown?.print ?? 0).toFixed(2)} ({Number(quote?.derived?.print_time_hr ?? 0).toFixed(2)} hr)</li>
-                <li>Support removal: ${Number(quote?.breakdown?.support ?? 0).toFixed(2)}</li>
-                <li>Wash & Cure: ${Number(quote?.breakdown?.wash_cure ?? 0).toFixed(2)}</li>
-                <li>Finishing: ${Number(quote?.breakdown?.finishing ?? 0).toFixed(2)}</li>
-                <li>Inspection: ${Number(quote?.breakdown?.inspection ?? 0).toFixed(2)}</li>
-                <li>Overhead: ${Number(quote?.breakdown?.overhead ?? 0).toFixed(2)}</li>
-                <li>Margin: ${Number(quote?.breakdown?.margin ?? 0).toFixed(2)}</li>
-              </ul>
-            </div>
-            <div className="mt-4 text-xs text-gray-600">Lead time: {leadObj.days} day(s). Prices include lead-time multiplier.</div>
-            <div className="mt-4 flex flex-col gap-2">
-              <button className="btn btn-primary">Checkout (mock)</button>
-              <button className="btn btn-outline">Save RFQ (email)</button>
-            </div>
-          </div>
-        ) : (
-          <p className="mt-3 text-sm text-gray-600">Get a price to see breakdown and actions.</p>
-        )}
       </div>
     </div>
-  )
+  );
 }
-
-function Metric({ label, value }){ return (<div><div className="text-gray-600">{label}</div><div className="mt-1 rounded-md border px-3 py-2">{value}</div></div>) }
-function Select({ label, value, onChange, options }){ return (<label className="block text-sm"><div className="text-gray-700">{label}</div><select className="mt-1 w-full rounded-xl border px-3 py-2" value={value} onChange={(e)=>onChange(e.target.value)}>{options.map(o=> <option key={o.id} value={o.id}>{o.name}</option>)}</select></label>) }
-function Number({ label, value, onChange, min=1 }){ return (<label className="block text-sm"><div className="text-gray-700">{label}</div><input type="number" min={min} className="mt-1 w-full rounded-xl border px-3 py-2" value={value} onChange={(e)=>onChange(e.target.value)} /></label>) }
