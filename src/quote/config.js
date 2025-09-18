@@ -1,11 +1,25 @@
-// Global knobs for the quote calculation
+// src/quote/config.js
+// One place to tune currency and per-material settings.
+
 export const QUOTE_DEFAULTS = {
-  currency: 'USD',
-  // Safety factors
-  supportFactor: 1.10,       // add 10% for supports & waste
-  postProcessFactor: 1.15,   // 15% time/cost overhead for wash/cure/handling
-  minPrice: 25,              // minimum job price
-  // Build rules
-  zSafetyMm: 1.0,            // extra height to account for raft/base
-  maxBoundingBoxMm: { x: 145, y: 145, z: 185 }, // Form 4L single-part safe box (example)
+  currency: "USD",
+  // global knobs
+  rushMultiplier: 1.4, // 40% upcharge if you later add a Rush toggle
+};
+
+// Map of materials (edit the numbers to your real costs/speeds)
+export const MATERIALS = {
+  "grey-v5":       { label: "Grey V5",       resinCostPerL: 199, buildRateCm3H: 14, supportWaste: 0.12, machineRatePerHour: 18, laborRatePerHour: 15, postProcessFactor: 1.15, minPrice: 18 },
+  "black-v5":      { label: "Black V5",      resinCostPerL: 199, buildRateCm3H: 14, supportWaste: 0.12, machineRatePerHour: 18, laborRatePerHour: 15, postProcessFactor: 1.15, minPrice: 18 },
+  "white-v5":      { label: "White V5",      resinCostPerL: 199, buildRateCm3H: 14, supportWaste: 0.12, machineRatePerHour: 18, laborRatePerHour: 15, postProcessFactor: 1.15, minPrice: 18 },
+  "clear":         { label: "Clear",         resinCostPerL: 225, buildRateCm3H: 12, supportWaste: 0.15, machineRatePerHour: 18, laborRatePerHour: 16, postProcessFactor: 1.18, minPrice: 22 },
+  "clear-cast":    { label: "Clear Cast",    resinCostPerL: 259, buildRateCm3H: 10, supportWaste: 0.15, machineRatePerHour: 18, laborRatePerHour: 16, postProcessFactor: 1.20, minPrice: 25 },
+  "tough-1500-v2": { label: "Tough 1500 V2", resinCostPerL: 229, buildRateCm3H: 12, supportWaste: 0.14, machineRatePerHour: 18, laborRatePerHour: 16, postProcessFactor: 1.18, minPrice: 22 },
+  "tough-2000":    { label: "Tough 2000",    resinCostPerL: 239, buildRateCm3H: 12, supportWaste: 0.14, machineRatePerHour: 18, laborRatePerHour: 16, postProcessFactor: 1.18, minPrice: 22 },
+  "tough-4000":    { label: "Tough 4000",    resinCostPerL: 249, buildRateCm3H: 11, supportWaste: 0.15, machineRatePerHour: 18, laborRatePerHour: 16, postProcessFactor: 1.20, minPrice: 24 },
+  "rigid-10k":     { label: "Rigid 10K",     resinCostPerL: 289, buildRateCm3H: 10, supportWaste: 0.16, machineRatePerHour: 18, laborRatePerHour: 17, postProcessFactor: 1.22, minPrice: 28 },
+  "high-temp":     { label: "High Temp",     resinCostPerL: 289, buildRateCm3H: 10, supportWaste: 0.16, machineRatePerHour: 18, laborRatePerHour: 17, postProcessFactor: 1.22, minPrice: 28 },
+  "flexible-80a":  { label: "Flexible 80A",  resinCostPerL: 269, buildRateCm3H: 10, supportWaste: 0.16, machineRatePerHour: 18, laborRatePerHour: 17, postProcessFactor: 1.22, minPrice: 26 },
+  "elastic-50a":   { label: "Elastic 50A",   resinCostPerL: 289, buildRateCm3H:  9, supportWaste: 0.18, machineRatePerHour: 18, laborRatePerHour: 17, postProcessFactor: 1.25, minPrice: 28 },
+  "esd":           { label: "ESD",           resinCostPerL: 349, buildRateCm3H:  9, supportWaste: 0.18, machineRatePerHour: 18, laborRatePerHour: 18, postProcessFactor: 1.25, minPrice: 32 },
 };
