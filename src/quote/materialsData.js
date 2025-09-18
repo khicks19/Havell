@@ -5,7 +5,7 @@ export const MATERIALS = [
     id: 'rigid10k',
     name: 'Rigid 10K',
     type: 'SLA',
-    resinCostPerL: 399,            // update from your supplier
+    resinCostPerL: 299,            // update from your supplier
     machineRatePerHour: 12,        // your amortized printer cost/hour
     laborRatePerHour: 25,
     buildRateCm3PerHour: 12,       // effective throughput incl. peel & overhead
