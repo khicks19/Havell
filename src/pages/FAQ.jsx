@@ -11,7 +11,7 @@ const CATEGORIES = [
         a: "STL (ASCII or binary) is best for instant quoting. STEP (.step/.stp) and IGES (.iges/.igs) are also accepted for review or if you need us to export a watertight STL for you."
       },
       {
-        q: "How do I get a quote?",
+        q: "How do I get a quick quote?",
         a: "Go to Instant Quote, upload your model, pick a material and finish, and submit. If something looks off (non-manifold, tiny scale, etc.) we’ll flag it and help you fix it."
       },
       {
@@ -37,8 +37,8 @@ const CATEGORIES = [
         a: "General prototyping resins (e.g., Grey/Black/White) are great for fast iteration and cosmetics. Engineering resins (Tough, Rigid, High Temp, ESD, Flexible/Elastic) target specific properties for functional parts."
       },
       {
-        q: "Do you offer other processes (SLS, DMLS, machining)?",
-        a: "Our core is SLA. We can advise on SLS/DMLS/CNC and broker certain jobs on request—reach out with your requirements."
+        q: "Do you offer other processes (SLS, DMLS, CNC, laser cutting)?",
+        a: "Currenlty we only offer SLA. As time goes on we are going to be rolling out the rest of our production line up and incorporating SLS, DMLS, CNC, and laser cutting."
       }
     ]
   },
@@ -48,7 +48,7 @@ const CATEGORIES = [
     faqs: [
       {
         q: "What tolerances can I expect?",
-        a: "Typical as-printed SLA tolerances are ±0.2 mm + 0.2% after post-cure, depending on geometry, orientation, and resin. If you need a specific fit, tell us the critical dimensions."
+        a: "Typical as-printed SLA tolerances are ±0.15 mm + 0.15% after post-cure, depending on geometry, orientation, and resin. If you need a specific fit, tell us the critical dimensions."
       },
       {
         q: "Recommended minimum wall thickness?",
@@ -86,7 +86,7 @@ const CATEGORIES = [
     faqs: [
       {
         q: "What are your max part dimensions?",
-        a: "Single-piece parts up to ~200 × 120 × 210 mm are typical. Larger is possible by splitting/ bonding. If you have a bigger envelope in mind, contact us—we’ll confirm options."
+        a: "Single-piece parts up to ~353 × 196 × 350 mm are typical. If you have a bigger envelope in mind, contact us—we’ll confirm options."
       },
       {
         q: "What layer heights do you print?",
@@ -94,7 +94,7 @@ const CATEGORIES = [
       },
       {
         q: "Surface finish expectations?",
-        a: "SLA produces very smooth surfaces. You will see fine layer lines on shallow angles and small support marks where supports attach; we remove supports and can sand/polish on request."
+        a: "SLA produces very smooth surfaces with incredible resolution. You will see fine to almost zero layer lines on shallow angles and small support marks where supports attach; we remove supports and can sand/polish on request."
       }
     ]
   },
@@ -104,11 +104,11 @@ const CATEGORIES = [
     faqs: [
       {
         q: "What finishing do you provide?",
-        a: "Standard: wash, post-cure, support removal. Optional: sanding, bead-blast-like matte (by hand-finishing), clear polish for transparent parts, dye/paint, threaded inserts, and custom labeling."
+        a: "Standard: double wash, post-cure, support removal. Optional: sanding, bead-blast-like matte (by hand-finishing), and custom labeling. More options coming soon"
       },
       {
         q: "Can you make parts optically clear?",
-        a: "Yes—on clear resins we can wet-sand and polish flat/accessible areas. Complex internal cavities will remain diffused without additional post-ops."
+        a: "Yes—on clear resins we can wet-sand and polish flat/accessible areas. Normally, parts will become very clear with high reolustion after post processing. Complex internal cavities will remain diffused without additional post-ops."
       },
       {
         q: "Sterilization / chemicals?",
@@ -148,11 +148,11 @@ const CATEGORIES = [
       },
       {
         q: "Multiple parts / assemblies—how should I quote?",
-        a: "Upload separate files for each unique part so we can orient and quote accurately. For assemblies, include a PDF or notes with critical fits."
+        a: "Upload separate files for each unique part so we can orient and quote accurately. For assemblies, include a PDF or notes with critical fits and instructions."
       },
       {
         q: "Shipping options?",
-        a: "Ground, 2-day, and overnight are available at checkout. Local pickup can be arranged on request."
+        a: "Ground, 2-day, and overnight are available at checkout."
       }
     ]
   },
@@ -179,12 +179,12 @@ const CATEGORIES = [
         a: "We can usually accommodate changes before print starts. Once printing begins, changes may require a new order."
       },
       {
-        q: "What if a part arrives damaged or out of spec?",
+        q: "What if a part arrives damaged or critically out of spec?",
         a: "Tell us within 7 days with photos and any critical dimensions. We’ll investigate and reprint or refund if we’re at fault."
       },
       {
         q: "Do you keep my files for reorders?",
-        a: "Yes—securely, so you can reorder quickly. If you prefer we delete files after completion, just let us know."
+        a: "Yes—securely, so you can reorder quickly. If you prefer we delete files after completion, just let us know. If parts are sensitive and require NDA please be sure to inform us and send the required information."
       }
     ]
   }
@@ -209,12 +209,12 @@ export default function FAQ() {
       <div className="mb-10 rounded-xl border bg-white p-5">
         <h2 className="font-semibold">Quick design rules (SLA)</h2>
         <ul className="mt-3 list-disc pl-5 text-gray-700 space-y-1">
-          <li>Typical tolerance: ±0.2 mm + 0.2% (post-cure).</li>
+          <li>Typical tolerance: ±0.15 mm + 0.15% (post-cure).</li>
           <li>Layer height: 100 μm (std), 50 μm (fine), 25 μm (select resins).</li>
           <li>Min wall: 1.0 mm (2.0 mm+ for large flats). Holes: ≥1.5–2.0 mm.</li>
           <li>Clearance: 0.2–0.4 mm sliding fits; 0.5–0.7 mm for easy assembly.</li>
           <li>Drain holes on hollow parts: 3–5 mm Ø at low points.</li>
-          <li>Max single-piece size: ~200 × 120 × 210 mm (larger by splitting).</li>
+          <li>Max single-piece size: ~353 × 196 × 350 mm (larger by splitting).</li>
         </ul>
       </div>
 
