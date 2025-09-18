@@ -28,10 +28,10 @@ export default function Contact() {
         </div>
 
         <div className="text-left">
-          <label className="block text-sm mb-1">Company</label>
+          <label className="block text-sm mb-1">Company (Put n/a if not applicable)</label>
           <input
             type="text"
-            name="company (Put n/a if not applicable)"
+            name="company"
             className="w-full rounded-xl border border-gray-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black/80"
           />
         </div>
