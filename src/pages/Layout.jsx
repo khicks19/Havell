@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import LogoImg from '../components/LogoImg'
 import OverlayMenu from '../components/OverlayMenu'
+import { SITE_EMAIL } from "../config"; // <-- add at top with other imports
+
 
 export default function Layout(){
   const [open, setOpen] = useState(false)
