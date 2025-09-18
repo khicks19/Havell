@@ -4,7 +4,7 @@ export default function Contact() {
   return (
     <section className="mx-auto max-w-7xl px-6 sm:px-8 py-10">
       <h1 className="text-3xl font-semibold text-center">Contact</h1>
-      <p className="mt-2 text-gray-600 text-center">We’ll reply within 1–2 business days.</p>
+      <p className="mt-2 text-gray-600 text-center">For questions and inquries please do not hesitate to reach out! We will get to you within 24-hours!</p>
 
       <form className="mt-8 mx-auto max-w-xl space-y-5">
         <div className="text-left">
@@ -31,7 +31,7 @@ export default function Contact() {
           <label className="block text-sm mb-1">Company</label>
           <input
             type="text"
-            name="company"
+            name="company (Put n/a if not applicable)"
             className="w-full rounded-xl border border-gray-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black/80"
           />
         </div>
