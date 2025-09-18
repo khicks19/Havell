@@ -1,65 +1,95 @@
-export async function parseSTL(file, units = 'mm') {
-  const buf = await file.arrayBuffer();
+// src/quote/parseStl.js
+// Tiny STL parser (ASCII + binary). Returns { volumeMm3, areaMm2, bbox:{min,max}, verticesCount, tris }
+export async function parseStl(fileOrArrayBuffer) {
+  const buf = fileOrArrayBuffer instanceof ArrayBuffer
+    ? fileOrArrayBuffer
+    : await fileOrArrayBuffer.arrayBuffer();
+
+  // Detect ASCII vs binary
+  const header = new TextDecoder().decode(buf.slice(0, 80));
+  const isAsciiLikely = header.trim().startsWith("solid") && !header.toLowerCase().includes("binary");
+
+  return isAsciiLikely ? parseAscii(new TextDecoder().decode(buf)) : parseBinary(buf);
+}
+
+function parseBinary(buf) {
   const dv = new DataView(buf);
-  const isAscii = (() => {
-    const head = new Uint8Array(buf.slice(0, 80));
-    let txt = ''; for (let i = 0; i < head.length; i++) txt += String.fromCharCode(head[i]);
-    return txt.trim().toLowerCase().startsWith('solid');
-  })();
+  const triCount = dv.getUint32(80, true);
+  let offset = 84;
+  let min = [ Infinity,  Infinity,  Infinity];
+  let max = [-Infinity, -Infinity, -Infinity];
+  let volume = 0;
+  let area = 0;
 
-  let vertices = []; let triangles = 0;
-  if (!isAscii) {
-    if (dv.byteLength < 84) throw new Error('Invalid STL: too small');
-    const triCount = dv.getUint32(80, true);
-    let offset = 84; triangles = triCount;
-    for (let i = 0; i < triCount; i++) {
-      offset += 12;
-      for (let v = 0; v < 9; v++) { vertices.push(dv.getFloat32(offset, true)); offset += 4; }
-      offset += 2;
-    }
-  } else {
-    const text = new TextDecoder().decode(buf);
-    const lines = text.split(/\r?\n/);
-    const vertexRE = /^vertex\s+([-\d.eE]+)\s+([-\d.eE]+)\s+([-\d.eE]+)/;
-    let tmp = [];
-    for (let i = 0; i < lines.length; i++) {
-      const m = vertexRE.exec(lines[i].trim());
-      if (m) {
-        tmp.push(parseFloat(m[1]), parseFloat(m[2]), parseFloat(m[3]));
-        if (tmp.length === 9) { vertices.push(...tmp); tmp = []; triangles++; }
-      }
-    }
-    if (triangles === 0) throw new Error('ASCII STL parse failed');
+  for (let i = 0; i < triCount; i++) {
+    // skip normal (3 floats)
+    offset += 12;
+    const v0 = [dv.getFloat32(offset+0, true), dv.getFloat32(offset+4, true), dv.getFloat32(offset+8, true)];
+    const v1 = [dv.getFloat32(offset+12, true), dv.getFloat32(offset+16, true), dv.getFloat32(offset+20, true)];
+    const v2 = [dv.getFloat32(offset+24, true), dv.getFloat32(offset+28, true), dv.getFloat32(offset+32, true)];
+    offset += 36;
+    offset += 2; // attribute
+
+    updateBounds(min, max, v0); updateBounds(min, max, v1); updateBounds(min, max, v2);
+    area += triArea(v0, v1, v2);
+    volume += signedTetraVolume(v0, v1, v2);
   }
+  return finalize(min, max, volume, area, triCount);
+}
 
-  const scale = units === 'in' ? 25.4 : 1;
-  for (let i = 0; i < vertices.length; i++) vertices[i] *= scale;
-
-  let minx=Infinity, miny=Infinity, minz=Infinity, maxx=-Infinity, maxy=-Infinity, maxz=-Infinity;
-  let area = 0, volume6 = 0;
-  function cross(ax, ay, az, bx, by, bz) { return [ay*bz - az*by, az*bx - ax*bz, ax*by - ay*bx]; }
-  function dot(ax, ay, az, bx, by, bz) { return ax*bx + ay*by + az*bz; }
-
-  for (let i = 0; i < vertices.length; i += 9) {
-    const x1=vertices[i], y1=vertices[i+1], z1=vertices[i+2];
-    const x2=vertices[i+3], y2=vertices[i+4], z2=vertices[i+5];
-    const x3=vertices[i+6], y3=vertices[i+7], z3=vertices[i+8];
-    minx = Math.min(minx, x1, x2, x3); miny = Math.min(miny, y1, y2, y3); minz = Math.min(minz, z1, z2, z3);
-    maxx = Math.max(maxx, x1, x2, x3); maxy = Math.max(maxy, y1, y2, y3); maxz = Math.max(maxz, z1, z2, z3);
-    const ax = x2 - x1, ay = y2 - y1, az = z2 - z1;
-    const bx = x3 - x1, by = y3 - y1, bz = z3 - z1;
-    const c = cross(ax, ay, az, bx, by, bz);
-    const triArea = 0.5 * Math.sqrt(c[0]*c[0] + c[1]*c[1] + c[2]*c[2]);
-    area += triArea;
-    volume6 += dot(x1, y1, z1, c[0], c[1], c[2]);
+function parseAscii(text) {
+  const vtx = [];
+  const re = /vertex\s+([+-]?\d*\.?\d+(?:[eE][+-]?\d+)?)\s+([+-]?\d*\.?\d+(?:[eE][+-]?\d+)?)\s+([+-]?\d*\.?\d+(?:[eE][+-]?\d+)?)/g;
+  let m;
+  while ((m = re.exec(text)) !== null) vtx.push([+m[1], +m[2], +m[3]]);
+  // Triangles are sequential groups of 3
+  let min = [ Infinity,  Infinity,  Infinity];
+  let max = [-Infinity, -Infinity, -Infinity];
+  let volume = 0;
+  let area = 0;
+  for (let i = 0; i < vtx.length; i += 3) {
+    const v0 = vtx[i], v1 = vtx[i+1], v2 = vtx[i+2];
+    if (!v2) break;
+    updateBounds(min, max, v0); updateBounds(min, max, v1); updateBounds(min, max, v2);
+    area += triArea(v0, v1, v2);
+    volume += signedTetraVolume(v0, v1, v2);
   }
+  return finalize(min, max, volume, area, Math.floor(vtx.length / 3));
+}
 
-  const volume = Math.abs(volume6) / 6;
+function updateBounds(min, max, v) {
+  if (v[0] < min[0]) min[0] = v[0]; if (v[0] > max[0]) max[0] = v[0];
+  if (v[1] < min[1]) min[1] = v[1]; if (v[1] > max[1]) max[1] = v[1];
+  if (v[2] < min[2]) min[2] = v[2]; if (v[2] > max[2]) max[2] = v[2];
+}
+function triArea(a, b, c) {
+  const ab = [b[0]-a[0], b[1]-a[1], b[2]-a[2]];
+  const ac = [c[0]-a[0], c[1]-a[1], c[2]-a[2]];
+  const cross = [
+    ab[1]*ac[2] - ab[2]*ac[1],
+    ab[2]*ac[0] - ab[0]*ac[2],
+    ab[0]*ac[1] - ab[1]*ac[0]
+  ];
+  const mag = Math.hypot(cross[0], cross[1], cross[2]);
+  return 0.5 * mag;
+}
+function signedTetraVolume(a, b, c) {
+  // V = dot(a, cross(b, c)) / 6
+  const cross = [
+    b[1]*c[2] - b[2]*c[1],
+    b[2]*c[0] - b[0]*c[2],
+    b[0]*c[1] - b[1]*c[0]
+  ];
+  return (a[0]*cross[0] + a[1]*cross[1] + a[2]*cross[2]) / 6;
+}
+function finalize(min, max, signedVolume, area, Triangles) {
+  const volumeMm3 = Math.abs(signedVolume); // assumes mm units in STL
+  const areaMm2 = area;
   return {
-    triangles,
-    bbox: { min: [minx, miny, minz], max: [maxx, maxy, maxz], size_mm: [maxx-minx, maxy-miny, maxz-minz] },
-    area_cm2: area / 100,
-    volume_cc: volume / 1000,
-    z_mm: maxz - minz
+    volumeMm3,
+    areaMm2,
+    bbox: { min, max, size: [max[0]-min[0], max[1]-min[1], max[2]-min[2]] },
+    verticesCount: Triangles * 3,
+    triangles: Triangles
   };
 }
