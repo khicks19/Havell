@@ -52,9 +52,14 @@ export default function Layout(){
             <Link className="hover:underline" to="/faq">FAQ</Link>
           </div>
           <div className="space-y-2">
-            <div>Email: <a className="hover:underline" href="mailto:info@havell.co">info@havell.co</a></div>
-            <div>© {new Date().getFullYear()} Havell LLC. All rights reserved.</div>
-          </div>
+  <p className="text-sm">
+    Email:{" "}
+    <a href={`mailto:${SITE_EMAIL}`} className="hover:underline">
+      {SITE_EMAIL}
+    </a>
+  </p>
+  <div>© {new Date().getFullYear()} Havell LLC. All rights reserved.</div>
+</div>
         </div>
       </footer>
 
