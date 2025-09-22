@@ -13,7 +13,9 @@ export default function QuoteWidget(){
   const [price, setPrice] = useState(null);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
-
+  const SHOW_BREAKDOWN = false;
+  
+  
   async function onFile(e){
     const f = e.target.files?.[0];
     if (!f) return;
@@ -156,35 +158,41 @@ export default function QuoteWidget(){
           </div>
         )}
 
-        {/* Price */}
-        {price && (
-          <div className="mt-8 rounded-xl border p-4">
-            <h3 className="text-lg font-semibold">Estimate</h3>
-            <p className="mt-1 text-sm text-gray-600">
-              Material: <span className="font-medium">{price.material.label}</span>
-            </p>
+      {/* Price */}
+{price && (
+  <div className="mt-8 rounded-xl border p-4">
+    <h3 className="text-lg font-semibold">Estimate</h3>
+    <p className="mt-1 text-sm text-gray-600">
+      Material: <span className="font-medium">{price.material.label}</span>
+    </p>
 
-            <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              <BreakdownRow label="Resin usage">{price.resinCm3.toFixed(1)} cm³</BreakdownRow>
-              <BreakdownRow label="Build time">{price.timeHours.toFixed(2)} h</BreakdownRow>
-              <BreakdownRow label="Max height">{(units==="mm" ? price.heightMm.toFixed(2)+" mm" : (price.heightMm/25.4).toFixed(3)+" in")}</BreakdownRow>
-            </div>
+    <div className="mt-4 grid gap-3 sm:grid-cols-2">
+      <BreakdownRow label="Resin usage">
+        {price.resinCm3.toFixed(1)} cm³
+      </BreakdownRow>
+      <BreakdownRow label="Build time">
+        {price.timeHours.toFixed(2)} h
+      </BreakdownRow>
+      <BreakdownRow label="Max height">
+        {units === "mm"
+          ? `${price.heightMm.toFixed(2)} mm`
+          : `${(price.heightMm / 25.4).toFixed(2)} in`}
+      </BreakdownRow>
+    </div>
 
-            <div className="mt-4 grid gap-2">
-              <BreakdownRow label="Resin cost">{formatUSD(price.breakdown.resinCost)}</BreakdownRow>
-              <BreakdownRow label="Machine cost">{formatUSD(price.breakdown.machineCost)}</BreakdownRow>
-              <BreakdownRow label="Labor">{formatUSD(price.breakdown.laborCost)}</BreakdownRow>
-              <hr className="my-2" />
-              <div className="flex items-center justify-between">
-                <div className="text-base font-semibold">Total</div>
-                <div className="text-xl font-bold">{formatUSD(price.total)}</div>
-              </div>
-              <p className="mt-2 text-xs text-gray-500">
-                Instant estimate. Final price may change after DFM review, orientation, and supports.
-              </p>
-            </div>
-          </div>
-        )}
+    <hr className="my-2" />
+
+    <div className="flex items-center justify-between">
+      <div className="text-base font-semibold">Total</div>
+      <div className="text-xl font-bold">{formatUSD(price.total)}</div>
+    </div>
+
+    <p className="mt-2 text-xs text-gray-500">
+      Instant estimate. Final price may change after DFM review, orientation, and supports.
+    </p>
+  </div>
+)}
+
       </div>
     </ErrorBoundary>
   );
