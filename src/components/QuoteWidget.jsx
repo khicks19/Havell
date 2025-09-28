@@ -158,33 +158,18 @@ export default function QuoteWidget(){
           </div>
         )}
 
-      {/* Price */}
+      {/* Estimate — only material + total */}
 {price && (
   <div className="mt-8 rounded-xl border p-4">
     <h3 className="text-lg font-semibold">Estimate</h3>
+
     <p className="mt-1 text-sm text-gray-600">
       Material: <span className="font-medium">{price.material.label}</span>
     </p>
 
-    <div className="mt-4 grid gap-3 sm:grid-cols-2">
-      <BreakdownRow label="Resin usage">
-        {price.resinCm3.toFixed(1)} cm³
-      </BreakdownRow>
-      <BreakdownRow label="Build time">
-        {price.timeHours.toFixed(2)} h
-      </BreakdownRow>
-      <BreakdownRow label="Max height">
-        {units === "mm"
-          ? `${price.heightMm.toFixed(2)} mm`
-          : `${(price.heightMm / 25.4).toFixed(2)} in`}
-      </BreakdownRow>
-    </div>
-
-    <hr className="my-2" />
-
-    <div className="flex items-center justify-between">
+    <div className="mt-4 flex items-center justify-between">
       <div className="text-base font-semibold">Total</div>
-      <div className="text-xl font-bold">{formatUSD(price.total)}</div>
+      <div className="text-2xl font-bold">{formatUSD(price.total)}</div>
     </div>
 
     <p className="mt-2 text-xs text-gray-500">
