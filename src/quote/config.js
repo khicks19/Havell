@@ -21,6 +21,6 @@ export const MATERIALS = {
   "high-temp":     { label: "High Temp",     resinCostPerL: 199, buildRateCm3H: 10, supportWaste: 0.16, machineRatePerHour: 10, laborRatePerHour: 17, postProcessFactor: 0.5, minPrice: 0 },
   "flexible-80a":  { label: "Flexible 80A",  resinCostPerL: 199, buildRateCm3H: 10, supportWaste: 0.16, machineRatePerHour: 10, laborRatePerHour: 17, postProcessFactor: 0.5, minPrice: 0 },
   "elastic-50a":   { label: "Elastic 50A",   resinCostPerL: 199, buildRateCm3H:  9, supportWaste: 0.18, machineRatePerHour: 10, laborRatePerHour: 17, postProcessFactor: 0.5, minPrice: 0 },
-  "esd":           { label: "ESD",           resinCostPerL: 229, buildRateCm3H:  9, supportWaste: 0.18, machineRatePerHour: 10, laborRatePerHour: 18, postProcessFactor: 0.5, minPrice: 0 },
-  "color-resin":   { label: "Color Resin",   resinCostPerL: 99, buildRateCm3H:  9, supportWaste: 0.12, machineRatePerHour: 10, laborRatePerHour: 15, postProcessFactor: 0.5, minPrice: 0 },
+  "esd":           { label: "ESD",           resinCostPerL: 229, buildRateCm3H:  20, supportWaste: 0.12, machineRatePerHour: 8, laborRatePerHour: 18, postProcessFactor: 0.5, minPrice: 0 },
+  "color-resin":   { label: "Color Resin",   resinCostPerL: 99, buildRateCm3H:  9, supportWaste: 0.12, machineRatePerHour: 10, laborRatePerHour: 12, postProcessFactor: 1.0, minPrice: 18 },
 };
