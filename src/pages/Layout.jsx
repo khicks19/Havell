@@ -31,8 +31,11 @@ export default function Layout(){
       </header>
 
       <main className="min-h-[70vh]">
-        <Outlet />
-      </main>
+         <div className="mx-auto max-w-7xl px-4 sm:px-6">
+       {/* page content renders here */}
+     <Outlet />
+   </div>
+     </main>
 
       <footer className="border-t py-10">
         <div className="mx-auto grid max-w-7xl gap-6 px-6 text-sm text-gray-600 sm:px-8 sm:grid-cols-3">
