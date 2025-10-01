@@ -5,9 +5,9 @@ export default function Home(){
   return (
     <section className="mx-auto max-w-7xl px-6 sm:px-8 py-10">
      {/* HERO — local MP4 */}
-<div className="relative overflow-hidden rounded-2xl border transparent aspect-[21/9] sm:aspect-[16/9]">
+<div className="relative z-0 overflow-hidden rounded-2xl border aspect-[21/9] sm:aspect-[16/9]">
   <video
-    className="absolute inset-0 h-full w-full object-cover object-center"
+    className="absolute inset-0 h-full w-full object-cover object-center pointer-events-none"
     src="/hero.mp4"
     poster="/hero-poster.jpg"
     autoPlay
