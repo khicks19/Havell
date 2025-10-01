@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@supports (padding: max(0px)) {
 
   /* Buttons */
 .btn { @apply inline-flex items-center justify-center rounded-full border px-5 py-3 text-sm font-medium transition; }
@@ -9,8 +8,7 @@
 .btn-primary:hover { @apply border-[color:var(--brand-red,#E3362C)] bg-white text-[color:var(--brand-red,#E3362C)]; }
 .btn-outline { @apply border-black text-black bg-white; }
 .btn-outline:hover { @apply border-[color:var(--brand-red,#E3362C)] text-[color:var(--brand-red,#E3362C)] bg-white; }
-  /* Mobile safe-area padding (iOS notch) */
-body { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
+ 
 
 :root{ color-scheme: light; }
 
