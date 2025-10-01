@@ -10,3 +10,6 @@
 .btn-outline:hover { @apply border-[color:var(--brand-red,#E3362C)] text-[color:var(--brand-red,#E3362C)] bg-white; }
 
 :root{ color-scheme: light; }
+
+@supports (padding: max(0px)) {
+  body { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
