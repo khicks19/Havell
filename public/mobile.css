@@ -1,0 +1,82 @@
+/* --------------------------------------------------
+   MOBILE FIXES FOR HAVELL WEBSITE
+   Only applies on screens ≤640px wide
+-------------------------------------------------- */
+@media (max-width: 640px) {
+
+  /* GENERAL PADDING / LAYOUT */
+  body, main, .container, .page-wrap {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    box-sizing: border-box;
+  }
+
+  /* HERO SECTION */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    border: 0 !important;
+    aspect-ratio: 16/9;
+  }
+
+  .hero > video, .hero video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none; /* allows hamburger tap */
+  }
+
+  /* TEXT OVER HERO */
+  .hero-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  /* BUTTONS STACK IN COLUMN */
+  .buttons-inline .btn {
+    display: block;
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  /* GRID SECTIONS BECOME SINGLE COLUMN */
+  .row-2 {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+
+  /* HEADER + HAMBURGER ALWAYS ABOVE HERO */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+  }
+
+  .hamburger {
+    position: relative;
+    z-index: 70;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  /* OVERLAY MENU (FULLSCREEN, CLICKS WORK) */
+  .overlay-root {
+    position: fixed;
+    inset: 0;
+    z-index: 100 !important;
+  }
+
+  /* GENERIC IMAGE FIXES */
+  img, video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+}
