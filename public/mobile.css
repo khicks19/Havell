@@ -2,7 +2,7 @@
    MOBILE FIXES FOR HAVELL WEBSITE
    Only applies on screens ≤640px wide
 -------------------------------------------------- */
-@media (max-width: 640px) {
+@media (max-width: 940px) {
 
   /* GENERAL PADDING / LAYOUT */
   body, main, .container, .page-wrap {
