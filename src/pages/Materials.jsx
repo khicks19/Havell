@@ -26,8 +26,8 @@ const MATERIALS = [
   { id: "tough-2000", name: "Tough 2000", vendor: VENDOR, img: "/materials/tough-2000.jpg",
     blurb: "ABS-like, strong, impact resistant.",
     categories: ["End-Use Parts", "Manufacturing Aids"] },
-  { id: "tough-4000", name: "Tough 4000", vendor: VENDOR, img: "/materials/tough-4000.jpg",
-    blurb: "High strength; glass-filled; ultra stiff.",
+  { id: "rigid-4000", name: "Rigid 4000", vendor: VENDOR, img: "/materials/tough-4000.jpg",
+    blurb: "High strength; glass-filled; ultra stiff; PEEK and PEKK like.",
     categories: ["End-Use Parts"] },
 
   // — Clear / casting / flame
