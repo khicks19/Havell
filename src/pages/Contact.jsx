@@ -7,20 +7,18 @@ export default function Contact() {
     email: "",
     company: "",
     message: "",
-    website: "", // honeypot
   });
-  const [submitting, setSubmitting] = useState(false);
+  const [sending, setSending] = useState(false);
   const [status, setStatus] = useState(null); // "ok" | "err" | null
 
-  const onChange = (e) => {
-    const { name, value } = e.target;
-    setForm((f) => ({ ...f, [name]: value }));
-  };
-
-  const onSubmit = async (e) => {
+  async function onSubmit(e) {
     e.preventDefault();
     setStatus(null);
-    setSubmitting(true);
+    if (!form.name || !form.email || !form.message) {
+      setStatus("err");
+      return;
+    }
+    setSending(true);
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -29,115 +27,103 @@ export default function Contact() {
       });
       if (!res.ok) throw new Error("Request failed");
       setStatus("ok");
-      setForm({ name: "", email: "", company: "", message: "", website: "" });
-    } catch (err) {
+      setForm({ name: "", email: "", company: "", message: "" });
+    } catch {
       setStatus("err");
     } finally {
-      setSubmitting(false);
+      setSending(false);
     }
-  };
+  }
 
   return (
-    <section className="mx-auto max-w-3xl px-6 sm:px-8 py-12">
-      <h1 className="text-2xl font-semibold mb-2">Contact</h1>
-      <p className="text-gray-600 mb-8">
-        For questions and inquiries please don’t hesitate to reach out. We
-        typically reply within 24 hours.
-      </p>
+    <main className="px-4 sm:px-6">
+      <section className="mx-auto max-w-4xl py-12 sm:py-16">
+        {/* Page title + subtitle (same as before) */}
+        <h1 className="text-2xl font-semibold">Contact</h1>
+        <p className="mt-2 text-sm text-gray-600">
+          For questions and inquiries please don’t hesitate to reach out. We typically
+          reply within 24 hours. You can also email us at{" "}
+          <span className="font-medium">inquiries.havell@gmail.com</span>.
+        </p>
 
-      <form
-        onSubmit={onSubmit}
-        className="rounded-2xl border p-6 space-y-5 bg-white"
-      >
-        {/* Honeypot (hidden) */}
-        <input
-          type="text"
-          name="website"
-          value={form.website}
-          onChange={onChange}
-          className="hidden"
-          tabIndex="-1"
-          autoComplete="off"
-        />
+        {/* Card */}
+        <form
+          onSubmit={onSubmit}
+          className="mt-6 rounded-2xl border bg-white p-6 sm:p-8 shadow-sm"
+        >
+          {/* Name */}
+          <label className="block">
+            <span className="text-sm text-gray-600">Name</span>
+            <input
+              type="text"
+              autoComplete="name"
+              placeholder="Jane Doe"
+              className="mt-1 w-full rounded-xl border px-4 py-3 outline-none focus:ring-2 focus:ring-black/10"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+            />
+          </label>
 
-        <Field label="Name">
-          <input
-            required
-            name="name"
-            value={form.name}
-            onChange={onChange}
-            className="input"
-            placeholder="Jane Doe"
-          />
-        </Field>
+          {/* Email */}
+          <label className="mt-4 block">
+            <span className="text-sm text-gray-600">Email</span>
+            <input
+              type="email"
+              autoComplete="email"
+              placeholder="you@company.com"
+              className="mt-1 w-full rounded-xl border px-4 py-3 outline-none focus:ring-2 focus:ring-black/10"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+            />
+          </label>
 
-        <Field label="Email">
-          <input
-            required
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={onChange}
-            className="input"
-            placeholder="you@company.com"
-          />
-        </Field>
+          {/* Company (optional) */}
+          <label className="mt-4 block">
+            <span className="text-sm text-gray-600">Company (optional)</span>
+            <input
+              type="text"
+              placeholder="ACME Corp"
+              className="mt-1 w-full rounded-xl border px-4 py-3 outline-none focus:ring-2 focus:ring-black/10"
+              value={form.company}
+              onChange={(e) => setForm({ ...form, company: e.target.value })}
+            />
+          </label>
 
-        <Field label="Company (optional)">
-          <input
-            name="company"
-            value={form.company}
-            onChange={onChange}
-            className="input"
-            placeholder="ACME Corp"
-          />
-        </Field>
+          {/* Message */}
+          <label className="mt-4 block">
+            <span className="text-sm text-gray-600">Message</span>
+            <textarea
+              rows={5}
+              placeholder="Tell us about your part(s), material, and timeline…"
+              className="mt-1 w-full rounded-xl border px-4 py-3 outline-none focus:ring-2 focus:ring-black/10"
+              value={form.message}
+              onChange={(e) => setForm({ ...form, message: e.target.value })}
+            />
+          </label>
 
-        <Field label="Message">
-          <textarea
-            required
-            name="message"
-            value={form.message}
-            onChange={onChange}
-            className="input min-h-[140px]"
-            placeholder="Tell us about your part(s), material, and timeline…"
-          />
-        </Field>
+          {/* Footer row: button + status */}
+          <div className="mt-6 flex items-center gap-4">
+            <button
+              type="submit"
+              disabled={sending}
+              className="btn btn-primary disabled:opacity-60"
+            >
+              {sending ? "Sending…" : "Send"}
+            </button>
 
-        <div className="flex items-center gap-3">
-          <button
-            className="btn btn-primary disabled:opacity-60"
-            disabled={submitting}
-            type="submit"
-          >
-            {submitting ? "Sending…" : "Send"}
-          </button>
-
-          {status === "ok" && (
-            <span className="text-green-600 text-sm">Message sent ✓</span>
-          )}
-          {status === "err" && (
-            <span className="text-red-600 text-sm">
-              Something went wrong. Please try again.
-            </span>
-          )}
-        </div>
-      </form>
-    </section>
+            {status === "ok" && (
+              <span className="text-sm text-emerald-600">
+                Thanks! Your message has been sent.
+              </span>
+            )}
+            {status === "err" && (
+              <span className="text-sm text-rose-600">
+                Something went wrong. Please check your info and try again.
+              </span>
+            )}
+          </div>
+        </form>
+      </section>
+    </main>
   );
 }
-
-function Field({ label, children }) {
-  return (
-    <label className="block">
-      <div className="text-sm font-medium text-gray-700 mb-1">{label}</div>
-      {children}
-    </label>
-  );
-}
-
-/* Tailwind helpers (you already use them; if not, add these classes to your CSS) */
-// In globals.css or tailwind layer, define:
-// .input { @apply w-full rounded-xl border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black/10; }
-// .btn { @apply inline-flex items-center justify-center rounded-full px-4 py-2 border; }
-// .btn-primary { @apply bg-black text-white border-black hover:brightness-110; }
