@@ -20,7 +20,7 @@ export default function Home(){
   {/* overlay content (keep yours) */}
   <div className="absolute inset-0 flex flex-col items-start justify-center p-8 sm:p-12">
     <h1 className="text-4xl font-bold sm:text-5xl text-white drop-shadow">
-      Creating the future of tomorrow
+      High-precision advanced additive manufacturing for aerospace, automotive, product development, robotics, and more.
     </h1>
     <div className="mt-6 flex gap-3">
       <Link to="/quote" className="btn btn-primary">Instant Quote</Link>
