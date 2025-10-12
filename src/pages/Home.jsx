@@ -76,7 +76,7 @@ export default function Home(){
   <div>
     <h2 className="text-2xl font-semibold">New to additive manufacturing?</h2>
     <p className="mt-3 text-gray-600 max-w-xl">
-      Our FAQ explains the basics—file types, materials, finishes, pricing, and lead times—
+      Our FAQ explains the basics—file types, materials, DFAM, finishes, pricing, and lead times—
       so you can move from idea to part with confidence.
     </p>
     <ul className="mt-3 list-disc list-inside text-sm text-gray-600">
