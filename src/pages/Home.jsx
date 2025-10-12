@@ -32,7 +32,7 @@ export default function Home(){
       <div className="mt-10 grid gap-10 lg:grid-cols-2 items-start">
         <div>
           <h2 className="text-2xl font-semibold">Leaders in quality for high‑end solutions in additive manufacturing</h2>
-          <p className="mt-3 text-gray-600 max-w-xl">Using state of the art technology, Havell has the capabilities to create the finest products in the industry, with incredible detail and complexity. Using Formlabs supeior proprietary resins, anything is possible.</p>
+          <p className="mt-3 text-gray-600 max-w-xl">Using state of the art technology, Havell has the capabilities to create the finest products in the industry, with incredible detail and complexity. Making tight geometries and executing perfect tolerances is what we do. We can make critical or non criticial parts for aerospace, automotive, robotics, medical, enterprise, electronics, protoyping, and tooling/fixtures. End use prodcuts and production runs are also avaible with us using our industrial grade printers.</p>
           <div className="mt-6">
             <Link to="/materials" className="btn btn-outline">Explore Materials</Link>
           </div>
