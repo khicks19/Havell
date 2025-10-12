@@ -62,8 +62,7 @@ export default function Home(){
     <h2 className="text-2xl font-semibold">The game has changed</h2>
     <p className="mt-3 text-gray-600 max-w-xl">
       We understand that the past is the past. America will never become that manufacturing powerhouse 
-      all those decades ago, atleast not in the old ways. Learn how Havell is 
-      evolving the manufacturing industry.
+      all those decades ago, atleast not in the old ways. We are constanly evolving the landscape to change how manufcaturing is done. New technologies, robotics, and the adoption of AI is shaping the future of manufacturing and how America will be at the top to adopt these new ways. The new frontier in American manufacturing is here.  
     </p>
     <div className="mt-6">
       <Link to="/about" className="btn btn-outline">About</Link>
