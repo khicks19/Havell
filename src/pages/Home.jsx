@@ -19,9 +19,9 @@ export default function Home(){
   <div className="absolute inset-0 bg-black/30" />
 
   <div className="absolute inset-0 flex flex-col items-start justify-center p-6 sm:p-12">
-    <h1 className="text-white drop-shadow text-3xl sm:text-5xl font-bold max-w-[35ch]">
-      Precision-grade components for aerospace, automotive, robotics, and industrial applications
-    </h1>
+   <h1 className="text-white drop-shadow text-2xl sm:text-4xl md:text-5xl font-bold leading-tight max-w-[35ch]">
+  Precision-grade components for aerospace, automotive, robotics, and industrial applications
+</h1>
     <div className="mt-6 flex flex-wrap gap-3">
       <Link to="/quote" className="btn btn-primary">Instant Quote</Link>
       <Link to="/solutions" className="btn btn-outline">What We Do</Link>
