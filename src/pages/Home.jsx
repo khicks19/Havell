@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 export default function Home(){
   return (
     <section className="mx-auto max-w-7xl px-6 sm:px-8 py-10">
-     {/* HERO — local MP4 */}
-<div className="relative z-0 overflow-hidden rounded-2xl border aspect-[21/9] sm:aspect-[16/9]">
+   {/* HERO — local MP4 */}
+<div className="relative z-0 overflow-hidden rounded-2xl border min-h-[60svh] sm:min-h-[70svh]">
   <video
     className="absolute inset-0 h-full w-full object-cover object-center pointer-events-none"
     src="/hero.mp4"
@@ -14,15 +14,15 @@ export default function Home(){
     muted
     loop
     playsInline
-    preload="metadata"
-    aria-hidden="true"
   />
-  {/* overlay content (keep yours) */}
-  <div className="absolute inset-0 flex flex-col items-start justify-center p-8 sm:p-12">
-    <h1 className="text-4xl font-bold sm:text-5xl text-white drop-shadow">
-     Precision-grade components for aerospace, automotive, robotics, and industrial applications
+  {/* NEW: contrast overlay so white text always pops */}
+  <div className="absolute inset-0 bg-black/30" />
+
+  <div className="absolute inset-0 flex flex-col items-start justify-center p-6 sm:p-12">
+    <h1 className="text-white drop-shadow text-3xl sm:text-5xl font-bold max-w-[35ch]">
+      Precision-grade components for aerospace, automotive, robotics, and industrial applications
     </h1>
-    <div className="mt-6 flex gap-3">
+    <div className="mt-6 flex flex-wrap gap-3">
       <Link to="/quote" className="btn btn-primary">Instant Quote</Link>
       <Link to="/solutions" className="btn btn-outline">What We Do</Link>
     </div>
