@@ -11,6 +11,27 @@
  
 
 :root{ color-scheme: light; }
+/* ==== HAVELL MOBILE FIX KIT (global) ==== */
+
+/* Prevent horizontal scrolling culprits */
+html, body { overflow-x: hidden; }
+
+/* Safer full-height on iOS (use svh instead of vh where possible) */
+.min-screen { min-height: 100svh; }
+
+/* Make media naturally responsive */
+img, video, canvas, svg, iframe { max-width: 100%; height: auto; display: block; }
+
+/* Ensure form controls don’t trigger iOS zoom */
+input, select, textarea { font-size: 16px; }
+
+/* Optional: slightly tighter container padding on phones */
+@media (max-width: 640px) {
+  header, footer, section { padding-left: 1rem; padding-right: 1rem; }
+}
+
+/* Long strings won’t blow layouts */
+h1, h2, h3, p { overflow-wrap: anywhere; word-break: break-word; }
 
 
 
